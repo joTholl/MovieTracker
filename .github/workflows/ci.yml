@@ -2,9 +2,9 @@ name: CI Build with Maven and Node.js
 
 on:
   push:
-    branches: [ "main", "development" ]
+    branches: [ "master", "development" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   backend:

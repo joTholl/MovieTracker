@@ -3,7 +3,6 @@ package org.example.backend.models;
 import lombok.With;
 import org.springframework.data.annotation.Id;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.List;
 

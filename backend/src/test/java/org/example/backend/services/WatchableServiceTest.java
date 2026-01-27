@@ -81,4 +81,42 @@ class WatchableServiceTest {
         verify(watchableRepo, times(1)).findById("1");
         verifyNoMoreInteractions(watchableRepo);
     }
+
+    @Test
+    void create_savesAndReturnsSavedWatchable() {
+        // given
+        Watchable toCreate = new Watchable(
+                null, // no id yet (Mongo typically generates it)
+                "Interstellar",
+                List.of("Matthew McConaughey", "Anne Hathaway"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                LocalDateTime.of(2014, 11, 7, 0, 0),
+                List.of("SciFi", "Drama"),
+                0,
+                12
+        );
+
+        Watchable saved = new Watchable(
+                "1",
+                "Interstellar",
+                List.of("Matthew McConaughey", "Anne Hathaway"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                LocalDateTime.of(2014, 11, 7, 0, 0),
+                List.of("SciFi", "Drama"),
+                0,
+                12
+        );
+
+        when(watchableRepo.save(toCreate)).thenReturn(saved);
+
+        // when
+        Watchable result = watchableService.create(toCreate);
+
+        // then
+        assertEquals(saved, result);
+        verify(watchableRepo, times(1)).save(toCreate);
+        verifyNoMoreInteractions(watchableRepo);
+    }
 }

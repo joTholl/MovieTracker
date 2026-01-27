@@ -12,23 +12,28 @@ import java.util.List;
 @Service
 public class WatchableService {
 
-    private final WatchableRepo watchableRepository;
+    private final WatchableRepo watchableRepo;
 
-    public WatchableService(WatchableRepo watchableRepository) {
-        this.watchableRepository = watchableRepository;
+    public WatchableService(WatchableRepo watchableRepo) {
+        this.watchableRepo = watchableRepo;
     }
 
     // Returns all Watchable documents from MongoDB.
     public List<Watchable> getAll() {
-        return watchableRepository.findAll();
+        return watchableRepo.findAll();
     }
 
     // Returns a Watchable by id, or throws 404 if it doesn't exist.
     public Watchable getById(String id) {
-        return watchableRepository.findById(id)
+        return watchableRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Watchable with id '" + id + "' not found"
                 ));
+    }
+
+    // Creates (saves) a Watchable in MongoDB and returns the saved document.
+    public Watchable create(Watchable watchable) {
+        return watchableRepo.save(watchable);
     }
 }

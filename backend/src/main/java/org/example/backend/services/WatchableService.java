@@ -18,12 +18,10 @@ public class WatchableService {
         this.watchableRepo = watchableRepo;
     }
 
-    // Returns all Watchable documents from MongoDB.
     public List<Watchable> getAll() {
         return watchableRepo.findAll();
     }
 
-    // Returns a Watchable by id, or throws 404 if it doesn't exist.
     public Watchable getById(String id) {
         return watchableRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -32,7 +30,6 @@ public class WatchableService {
                 ));
     }
 
-    // Creates (saves) a Watchable in MongoDB and returns the saved document.
     public Watchable create(Watchable watchable) {
         return watchableRepo.save(watchable);
     }

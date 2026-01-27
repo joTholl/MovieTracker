@@ -20,7 +20,7 @@ public class WatchableController {
     }
 
     // GET
-    @GetMapping
+    @GetMapping()
     public List<Watchable> getAll() {
         return watchableService.getAll();
     }

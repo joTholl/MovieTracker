@@ -35,7 +35,9 @@ class WatchableServiceTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                LocalDateTime.of(2014, 11, 7, 0, 0),
+                //LocalDateTime.of(2014, 11, 7, 0, 0),
+                "2014, 11, 7, 0, 0",
+
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -65,7 +67,8 @@ class WatchableServiceTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                LocalDateTime.of(2014, 11, 7, 0, 0),
+                //LocalDateTime.of(2014, 11, 7, 0, 0),
+                "2014, 11, 7, 0, 0",
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -91,7 +94,8 @@ class WatchableServiceTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                LocalDateTime.of(2014, 11, 7, 0, 0),
+                //LocalDateTime.of(2014, 11, 7, 0, 0),
+                "2014, 11, 7, 0, 0",
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -103,7 +107,8 @@ class WatchableServiceTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                LocalDateTime.of(2014, 11, 7, 0, 0),
+                //LocalDateTime.of(2014, 11, 7, 0, 0),
+                "2014, 11, 7, 0, 0",
                 List.of("SciFi", "Drama"),
                 0,
                 12

@@ -4,6 +4,7 @@ package org.example.backend.controller;
 import org.example.backend.models.Watchable;
 import org.example.backend.services.WatchableService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +24,12 @@ public class WatchableController {
     @GetMapping
     public List<Watchable> getAll() {
         return watchableService.getAll();
+    }
+
+
+    // GET
+    @GetMapping("/{id}")
+    public Watchable getById(@PathVariable String id) {
+        return watchableService.getById(id);
     }
 }

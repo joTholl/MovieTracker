@@ -44,7 +44,6 @@ class WatchableControllerTest {
     void getAll() throws Exception {
 
         LocalDateTime releaseDate = LocalDateTime.of(2018, Month.NOVEMBER, 24, 0, 0, 0);
-        String releaseDateString = releaseDate.toString();
 
         Watchable w1 = new Watchable(
                 "1",
@@ -81,5 +80,47 @@ class WatchableControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonMatch);
+    }
+
+    @Test
+    void getById_whenFound_returns200AndJsonObject() throws Exception {
+
+        // given
+        LocalDateTime releaseDate = LocalDateTime.of(2018, Month.NOVEMBER, 24, 0, 0, 0);
+
+        Watchable w1 = new Watchable(
+                "1",
+                "Interstellar",
+                List.of("Matthew McConaughey", "Anne Hathaway"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                releaseDate,
+                List.of("SciFi", "Drama"),
+                0,
+                12
+        );
+
+        watchableRepo.save(w1);
+
+        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json("""
+                {
+                      "id": "1",
+                      "title": "Interstellar",
+                      "actors": ["Matthew McConaughey", "Anne Hathaway"],
+                      "duration": "02:49",
+                      "directors": ["Christopher Nolan"],
+                      "releaseDate": "2018-11-24T00:00:00",
+                      "genres": ["SciFi", "Drama"],
+                      "episode": 0,
+                      "ageRating": 12
+                    }
+                """);
+
+        // when + then
+        mockMvc.perform(get("/api/watchables/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonMatch);
+
     }
 }

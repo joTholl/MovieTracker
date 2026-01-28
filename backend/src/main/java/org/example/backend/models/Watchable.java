@@ -11,4 +11,5 @@ import java.util.List;
 @Document(collection = "Watchable")
 @With
 public record Watchable(@Id String id, String title, List<String> actors, String duration, List<String> directors, LocalDate releaseDate, List<String> genres, int episode, int ageRating) {
+
 }

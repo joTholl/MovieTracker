@@ -1,15 +1,19 @@
 package org.example.backend.controllers;
 
+import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.models.InWatchableDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.repos.WatchableRepo;
+import org.example.backend.services.WatchableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -18,8 +22,9 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static com.mongodb.assertions.Assertions.assertNotNull;
+import static com.mongodb.assertions.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,7 +65,8 @@ class WatchableControllerTest {
 
         watchableRepo.save(w1);
 
-        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(        """
+        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(
+                                """
                                 [
                                   {
                                     "id": "1",
@@ -131,7 +137,6 @@ class WatchableControllerTest {
         // when + then
         mockMvc.perform(post("/api/watchables")
                         .contentType(MediaType.APPLICATION_JSON)
-                        //.content(jsonMatch.toString()))
                         .content("""
                                     {
                                       "title": "Interstellar",
@@ -151,14 +156,40 @@ class WatchableControllerTest {
     }
 
     @Test
-    void deleteById_whenMissing_returns404() throws Exception {
-//        // given
-//
-//        WatchableService service = new WatchableService(watchableRepo);
-//        ResponseEntity response = ResponseEntity.noContent().build();
-//
-//        // when + then
-//        mockMvc.perform(delete("/api/watchables/1"))
-//                .andExpect(status().isNoContent());
+    void deleteById() throws Exception {
+        // when + then
+
+        Watchable w1 = new Watchable(
+                "1",
+                "Interstellar",
+                List.of("Matthew McConaughey", "Anne Hathaway"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                fakeDate,
+                List.of("SciFi", "Drama"),
+                0,
+                12
+        );
+
+        watchableRepo.save(w1);
+        mockMvc.perform(delete("/api/watchables/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteById_whenMissing_returnsWatchableNotFoundException() throws Exception {
+
+        // when
+        MvcResult result = mockMvc.perform(delete("/api/watchables/1"))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        // then: inspect the exception Spring resolved for this request
+        Exception ex = result.getResolvedException();
+        assertNotNull(ex);
+        assertInstanceOf(WatchableNotFoundException.class, ex);
+
+        // optional: assert message
+        assertTrue(ex.getMessage().contains("1"));
     }
 }

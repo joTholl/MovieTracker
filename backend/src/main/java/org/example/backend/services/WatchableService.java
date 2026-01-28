@@ -23,11 +23,18 @@ public class WatchableService {
     }
 
     public Watchable getById(String id) {
+        if(id == null) {
+            throw new RuntimeException("cannot find watchable with null id");
+        }
         return watchableRepo.findById(id)
                 .orElseThrow(() -> new WatchableNotFoundException(id));
     }
 
     public Watchable create(InWatchableDto in) {
+
+        if (in == null) {
+            throw new RuntimeException("cannot create Watchable with null InWatchableDto");
+        }
 
         UtilityFunctions utilityFunctions = new UtilityFunctions();
         String id = utilityFunctions.createId();
@@ -46,17 +53,27 @@ public class WatchableService {
         return watchableRepo.save(newWatchable);
     }
 
-    public void deleteById(String id) {
+    public boolean deleteById(String id) {
+
+        if(id == null){
+            throw new RuntimeException("cannot delete Watchable with null id");
+        }
 
         boolean exists = watchableRepo.existsById(id);
-
         if (!exists) {
             throw new WatchableNotFoundException(id);
         }
+
         watchableRepo.deleteById(id);
+        return true;
     }
 
     public Watchable update(String id, InWatchableDto in) {
+
+        if (in == null) {
+            throw new RuntimeException("cannot update Watchable with null InWatchableDto");
+        }
+
         boolean exists = watchableRepo.existsById(id);
 
         if (!exists) {

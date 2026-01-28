@@ -31,7 +31,18 @@ public class WatchableService {
 
         UtilityFunctions utilityFunctions = new UtilityFunctions();
         String id = utilityFunctions.createId();
-        Watchable newWatchable = new Watchable(id, in.title(), in.actors(), in.duration(), in.directors(), in.releaseDate(), in.genres(), in.episode(), in.ageRating());
+
+        Watchable newWatchable = new Watchable(
+                id,
+                in.title(),
+                in.actors(),
+                in.duration(),
+                in.directors(),
+                in.releaseDate(),
+                in.genres(),
+                in.episode(),
+                in.ageRating());
+
         return watchableRepo.save(newWatchable);
     }
 
@@ -53,6 +64,7 @@ public class WatchableService {
         }
 
         Watchable existing = watchableRepo.findById(id).orElseThrow(() -> new WatchableNotFoundException(id));
+
         Watchable toSave = existing
                 .withId(id)
                 .withTitle(in.title())

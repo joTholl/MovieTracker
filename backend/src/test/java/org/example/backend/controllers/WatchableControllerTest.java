@@ -1,8 +1,8 @@
 package org.example.backend.controllers;
 
+import org.example.backend.models.InWatchableDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.repos.WatchableRepo;
-import org.example.backend.services.WatchableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,6 +39,8 @@ class WatchableControllerTest {
         watchableRepo.deleteAll(); // ensures every test starts from empty DB
     }
 
+    private final LocalDate fakeDate = LocalDate.of(2014, 6, 15);
+
     @Test
     void getAll() throws Exception {
 
@@ -47,7 +52,7 @@ class WatchableControllerTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                "2014, 11, 7, 0, 0",
+                fakeDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -63,13 +68,13 @@ class WatchableControllerTest {
                                     "actors": ["Matthew McConaughey", "Anne Hathaway"],
                                     "duration": "02:49",
                                     "directors": ["Christopher Nolan"],
-                                    "releaseDate": "2014, 11, 7, 0, 0",
+                                    "releaseDate": "%s",
                                     "genres": ["SciFi", "Drama"],
                                     "episode": 0,
                                     "ageRating": 12
                                   }
                                 ]
-                                """);
+                                """.formatted(fakeDate));
 
         // when + then
         mockMvc.perform(get("/api/watchables"))
@@ -90,8 +95,7 @@ class WatchableControllerTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                "2014, 11, 7, 0, 0",
-
+                fakeDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -106,13 +110,12 @@ class WatchableControllerTest {
                       "actors": ["Matthew McConaughey", "Anne Hathaway"],
                       "duration": "02:49",
                       "directors": ["Christopher Nolan"],
-                      "releaseDate": "2014, 11, 7, 0, 0",
-                      //"releaseDate": "2018-11-24T00:00:00",
+                      "releaseDate": "%s",
                       "genres": ["SciFi", "Drama"],
                       "episode": 0,
                       "ageRating": 12
                 }
-                """);
+                """.formatted(fakeDate));
 
         // when + then
         mockMvc.perform(get("/api/watchables/1"))
@@ -125,46 +128,26 @@ class WatchableControllerTest {
     @Test
     void create_returnsCreatedWatchable() throws Exception {
 
-        // given: what the service returns after saving
-        LocalDateTime releaseDate = LocalDateTime.of(2018, Month.NOVEMBER, 24, 0, 0, 0);
-
-        Watchable newWatchable = new Watchable(
-                "1",
-                "Interstellar",
-                List.of("Matthew McConaughey", "Anne Hathaway"),
-                "02:49",
-                List.of("Christopher Nolan"),
-                //releaseDate,
-                "2018-11-24T00:00:00",
-                List.of("SciFi", "Drama"),
-                0,
-                12
-        );
-
-        WatchableService service = new WatchableService(watchableRepo);
-        service.create(newWatchable);
-
-        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json("""
-                    {
-                      "id": "1",
-                      "title": "Interstellar",
-                      "actors": ["Matthew McConaughey", "Anne Hathaway"],
-                      "duration": "02:49",
-                      "directors": ["Christopher Nolan"],
-                      "releaseDate": "2018-11-24T00:00:00",
-                      "genres": ["SciFi", "Drama"],
-                      "episode": 0,
-                      "ageRating": 12
-                    }
-                """);
-
         // when + then
         mockMvc.perform(post("/api/watchables")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonMatch.toString()));
-                //.andExpect(status().isCreated());
-                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                //.andExpect(jsonMatch);
+                        //.content(jsonMatch.toString()))
+                        .content("""
+                                    {
+                                      "title": "Interstellar",
+                                      "actors": ["Matthew McConaughey", "Anne Hathaway"],
+                                      "duration": "02:49",
+                                      "directors": ["Christopher Nolan"],
+                                      "releaseDate": "%s",
+                                      "genres": ["SciFi", "Drama"],
+                                      "episode": 0,
+                                      "ageRating": 12
+                                    }
+                                """.formatted(fakeDate)))
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Interstellar"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.duration").value("02:49"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.directors").value("Christopher Nolan"));
     }
 
     @Test

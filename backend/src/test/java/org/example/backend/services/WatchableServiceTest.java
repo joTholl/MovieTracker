@@ -1,13 +1,10 @@
 package org.example.backend.services;
 
+import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.models.Watchable;
 import org.example.backend.repos.WatchableRepo;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +49,7 @@ class WatchableServiceTest {
 
         // then
         assertEquals(1, result.size());
-        assertEquals(w1, result.get(0));
+        assertEquals(w1, result.getFirst());
         assertEquals(expected, result);
         verify(watchableRepo, times(1)).findAll();
         verifyNoMoreInteractions(watchableRepo);
@@ -122,6 +119,80 @@ class WatchableServiceTest {
         // then
         assertEquals(saved, result);
         verify(watchableRepo, times(1)).save(toCreate);
+        verifyNoMoreInteractions(watchableRepo);
+    }
+
+    @Test
+    void deleteById_whenExists_deletes() {
+        // given
+        when(watchableRepo.existsById("1")).thenReturn(true);
+
+        // when
+        watchableService.deleteById("1");
+
+        // then
+        verify(watchableRepo, times(1)).existsById("1");
+        verify(watchableRepo, times(1)).deleteById("1");
+        verifyNoMoreInteractions(watchableRepo);
+    }
+
+    @Test
+    void deleteById_whenMissing_throwsWatchableNotFoundException() {
+        // given
+        when(watchableRepo.existsById("1")).thenReturn(false);
+
+        // when - then
+        assertThrows(WatchableNotFoundException.class, () -> watchableService.deleteById("1"));
+        verify(watchableRepo, times(1)).existsById("1");
+        verify(watchableRepo, never()).deleteById(anyString());
+        verifyNoMoreInteractions(watchableRepo);
+    }
+
+    @Test
+    void update_whenExists_overwritesExisting() {
+        // given
+        String pathId = "1";
+
+        Watchable existing = new Watchable(
+                pathId,
+                "Interstellar (Edited)",
+                List.of("Matthew McConaughey"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                //LocalDateTime.of(2014, 11, 7, 0, 0),
+                "2014, 11, 7, 0, 0",
+                List.of("SciFi"),
+                0,
+                12
+        );
+
+        Watchable updated = new Watchable(
+                pathId,
+                "Odysseus",
+                List.of("Matt Damon"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                //LocalDateTime.of(2014, 11, 7, 0, 0),
+                "2025, 11, 7, 0, 0",
+                List.of("Fantasy", "Historical"),
+                0,
+                12
+        );
+
+        when(watchableRepo.existsById(pathId)).thenReturn(true);
+        when(watchableRepo.findById(pathId)).thenReturn(Optional.of(updated));
+        when(watchableRepo.save(updated)).thenReturn(updated);
+
+        // when
+        Watchable expected = watchableService.update(pathId, updated);
+
+        // then
+        assertEquals(pathId, expected.id());
+        assertEquals(updated.title(), expected.title());
+
+        verify(watchableRepo, times(1)).existsById(pathId);
+        verify(watchableRepo, times(1)).findById(pathId);
+        verify(watchableRepo, times(1)).save(updated);
         verifyNoMoreInteractions(watchableRepo);
     }
 }

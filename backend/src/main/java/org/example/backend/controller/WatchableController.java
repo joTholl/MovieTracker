@@ -1,6 +1,5 @@
 package org.example.backend.controller;
 
-
 import org.example.backend.models.Watchable;
 import org.example.backend.services.WatchableService;
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,20 @@ public class WatchableController {
     // POST
     @PostMapping
     public ResponseEntity<Watchable> create(@RequestBody Watchable watchable) {
-        Watchable saved = watchableService.create(watchable);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        Watchable createdWatchable = watchableService.create(watchable);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdWatchable);
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
+        watchableService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // PUT
+    @PutMapping("/{id}")
+    public Watchable update(@PathVariable String id, @RequestBody Watchable watchable) {
+        return watchableService.update(id, watchable);
     }
 }

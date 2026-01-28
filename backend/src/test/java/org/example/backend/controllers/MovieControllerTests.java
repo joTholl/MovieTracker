@@ -3,6 +3,7 @@ package org.example.backend.controllers;
 import org.example.backend.models.Movie;
 import org.example.backend.models.MovieDto;
 import org.example.backend.repositorys.MovieRepo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,11 @@ public class MovieControllerTests {
 
     @Autowired
     private MovieRepo repo;
+
+    @BeforeEach
+    void cleanDb() {
+        repo.deleteAll();
+    }
 
     @Test
     void getAllMovies_shouldReturnListOfAllMovies() throws Exception {
@@ -83,7 +89,7 @@ public class MovieControllerTests {
                                 "Amazon",
                                 "Prime",
                                 "Disney+",
-                                "WoW"
+                                "Test"
                             ]
                         }
                         """))
@@ -96,7 +102,7 @@ public class MovieControllerTests {
                                 "Amazon",
                                 "Prime",
                                 "Disney+",
-                                "WoW"
+                                "Test"
                             ]
                         }
 """));

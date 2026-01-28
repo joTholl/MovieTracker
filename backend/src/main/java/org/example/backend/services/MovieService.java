@@ -76,6 +76,10 @@ public class MovieService {
     public Movie changeMovie(String id, MovieDto newMovie) {
         Movie movie = repo.findById(id).orElse(null);
 
+        if(movie == null) {
+            return null;
+        }
+
         String watchable = movie.watchableID();
         List<String> streamable = movie.streamable();
 

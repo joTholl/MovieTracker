@@ -1,7 +1,13 @@
 package org.example.backend.repositories;
 
+import org.example.backend.models.Season;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public class SeasonRepository {
+public interface SeasonRepository extends MongoRepository<Season,String> {
+
+
 }

@@ -1,4 +1,4 @@
-package org.example.backend.repos;
+package org.example.backend.repositories;
 
 import org.springframework.stereotype.Repository;
 

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -33,6 +34,20 @@ public class MovieServiceTests {
     }
 
     @Test
+    void getMovieById_ShouldReturnNullIfNoId() {
+        //GIVEN
+        List<String> streamable = List.of("Amazon", "Prime");
+        Movie movie = new Movie("1", "8", streamable);
+        when(mockRepo.findById(movie.id())).thenReturn(Optional.of(movie));
+
+        //WHEN
+        Movie result = service.getMovieById("");
+
+        //THEN
+        assertThat(result).isEqualTo(null);
+    }
+
+    @Test
     void createMovie_ShouldReturnNewMovie() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
@@ -51,7 +66,7 @@ public class MovieServiceTests {
     }
 
     @Test
-    void deleteMovie_ShouldDeleteMovieById() {
+    void deleteMovie_ShouldReturnTrueIfDeletedSuccessfull() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
         Movie movie = new Movie("1", "8", streamable);
@@ -65,6 +80,20 @@ public class MovieServiceTests {
         assertTrue(result);
 
         verify(mockRepo).deleteById("1");
+    }
+
+    @Test
+    void deleteMovie_ShouldReturnFalseIfDeletedSuccessfull() {
+        //GIVEN
+        List<String> streamable = List.of("Amazon", "Prime");
+        Movie movie = new Movie("1", "8", streamable);
+        when(mockRepo.existsById("2")).thenReturn(false);
+
+        //WHEN
+        boolean result = service.deleteMovie("2");
+
+        //THEN
+        assertFalse(result);
     }
 
     @Test

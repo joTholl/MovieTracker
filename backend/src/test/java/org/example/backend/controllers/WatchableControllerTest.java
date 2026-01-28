@@ -11,7 +11,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -22,8 +25,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
-import static com.mongodb.assertions.Assertions.assertNotNull;
-import static com.mongodb.assertions.Assertions.assertTrue;
+import static com.mongodb.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -184,12 +186,52 @@ class WatchableControllerTest {
                 .andExpect(status().isNotFound())
                 .andReturn();
 
-        // then: inspect the exception Spring resolved for this request
         Exception ex = result.getResolvedException();
         assertNotNull(ex);
         assertInstanceOf(WatchableNotFoundException.class, ex);
 
-        // optional: assert message
         assertTrue(ex.getMessage().contains("1"));
+    }
+
+    @Test
+    void update() throws Exception {
+
+        Watchable w1 = new Watchable(
+                "1",
+                "Interstellar",
+                List.of("Matthew McConaughey", "Anne Hathaway"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                fakeDate,
+                List.of("SciFi", "Drama"),
+                0,
+                12
+        );
+
+        watchableRepo.save(w1);
+
+        MvcResult result = mockMvc.perform(put("/api/watchables/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                          "title": "Interstellar",
+                          "actors": ["Matthew McConaughey", "Anne Hathaway"],
+                          "duration": "02:49",
+                          "directors": ["Christopher Nolan"],
+                          "releaseDate": "%s",
+                          "genres": ["SciFi", "Drama"],
+                          "episode": 0,
+                          "ageRating": 12
+                        }
+                        """.formatted(fakeDate)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Interstellar"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.duration").value("02:49"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.directors").value("Christopher Nolan"))
+                .andReturn();
+
+        Exception ex = result.getResolvedException();
+        assertNull(ex);
     }
 }

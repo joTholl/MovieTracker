@@ -1,5 +1,6 @@
 import './App.css'
-import {Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
+import Movie from "./components/Movie.tsx";
 
 function App() {
 
@@ -7,7 +8,7 @@ function App() {
   return (
     <>
         <Routes>
-
+            <Route path="/movie" element={<Movie />}></Route>
         </Routes>
     </>
   )

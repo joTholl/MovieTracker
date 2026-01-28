@@ -29,7 +29,7 @@ public class MovieService {
     }
 
     public List<Movie> getMoviesByActor(String actor) {
-        return repo.findAll();
+        return null;
     }
 
     public List<Movie> getMoviesByRegisseur(String regisseur) {

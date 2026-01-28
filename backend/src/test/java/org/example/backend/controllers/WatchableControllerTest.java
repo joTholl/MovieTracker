@@ -1,6 +1,5 @@
-package org.example.backend.controller;
+package org.example.backend.controllers;
 
-import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.models.Watchable;
 import org.example.backend.repos.WatchableRepo;
 import org.example.backend.services.WatchableService;

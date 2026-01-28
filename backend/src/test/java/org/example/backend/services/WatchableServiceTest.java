@@ -5,6 +5,8 @@ import org.example.backend.models.Watchable;
 import org.example.backend.repos.WatchableRepo;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,8 @@ class WatchableServiceTest {
     WatchableRepo watchableRepo =  Mockito.mock(WatchableRepo.class);
     WatchableService watchableService = new WatchableService(watchableRepo);
 
+    private final LocalDate fakeDate = LocalDate.of(2014, 6, 15);
+
     @Test
     void getAll_ShouldReturnListOfSizeOne_ContainingGivenWatchable() {
 
@@ -32,9 +36,7 @@ class WatchableServiceTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                //LocalDateTime.of(2014, 11, 7, 0, 0),
-                "2014, 11, 7, 0, 0",
-
+                fakeDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -65,7 +67,7 @@ class WatchableServiceTest {
                 "02:49",
                 List.of("Christopher Nolan"),
                 //LocalDateTime.of(2014, 11, 7, 0, 0),
-                "2014, 11, 7, 0, 0",
+                fakeDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -92,7 +94,7 @@ class WatchableServiceTest {
                 "02:49",
                 List.of("Christopher Nolan"),
                 //LocalDateTime.of(2014, 11, 7, 0, 0),
-                "2014, 11, 7, 0, 0",
+                fakeDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -105,7 +107,7 @@ class WatchableServiceTest {
                 "02:49",
                 List.of("Christopher Nolan"),
                 //LocalDateTime.of(2014, 11, 7, 0, 0),
-                "2014, 11, 7, 0, 0",
+                fakeDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -160,7 +162,7 @@ class WatchableServiceTest {
                 "02:49",
                 List.of("Christopher Nolan"),
                 //LocalDateTime.of(2014, 11, 7, 0, 0),
-                "2014, 11, 7, 0, 0",
+                fakeDate,
                 List.of("SciFi"),
                 0,
                 12
@@ -173,7 +175,7 @@ class WatchableServiceTest {
                 "02:49",
                 List.of("Christopher Nolan"),
                 //LocalDateTime.of(2014, 11, 7, 0, 0),
-                "2025, 11, 7, 0, 0",
+                fakeDate,
                 List.of("Fantasy", "Historical"),
                 0,
                 12

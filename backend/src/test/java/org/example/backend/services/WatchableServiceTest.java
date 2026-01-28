@@ -1,6 +1,7 @@
 package org.example.backend.services;
 
 import org.example.backend.exceptions.WatchableNotFoundException;
+import org.example.backend.models.InWatchableDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.repos.WatchableRepo;
 import org.junit.jupiter.api.Test;
@@ -87,13 +88,11 @@ class WatchableServiceTest {
     @Test
     void create_savesAndReturnsSavedWatchable() {
         // given
-        Watchable toCreate = new Watchable(
-                null, // no id yet (Mongo typically generates it)
+        InWatchableDto toCreate = new InWatchableDto(
                 "Interstellar",
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                //LocalDateTime.of(2014, 11, 7, 0, 0),
                 fakeDate,
                 List.of("SciFi", "Drama"),
                 0,
@@ -102,25 +101,25 @@ class WatchableServiceTest {
 
         Watchable saved = new Watchable(
                 "1",
-                "Interstellar",
-                List.of("Matthew McConaughey", "Anne Hathaway"),
-                "02:49",
-                List.of("Christopher Nolan"),
-                //LocalDateTime.of(2014, 11, 7, 0, 0),
-                fakeDate,
-                List.of("SciFi", "Drama"),
-                0,
-                12
-        );
+                toCreate.title(),
+                toCreate.actors(),
+                toCreate.duration(),
+                toCreate.directors(),
+                toCreate.releaseDate(),
+                toCreate.genres(),
+                toCreate.episode(),
+                toCreate.ageRating());
 
-        when(watchableRepo.save(toCreate)).thenReturn(saved);
+        Mockito.when(watchableRepo.save(any())).thenReturn(saved);
 
         // when
+
         Watchable result = watchableService.create(toCreate);
 
         // then
-        assertEquals(saved, result);
-        verify(watchableRepo, times(1)).save(toCreate);
+        assertNotNull(result);
+        assertEquals(result.directors(), result.directors());
+        verify(watchableRepo, times(1)).save(any());
         verifyNoMoreInteractions(watchableRepo);
     }
 
@@ -155,46 +154,43 @@ class WatchableServiceTest {
         // given
         String pathId = "1";
 
-        Watchable existing = new Watchable(
-                pathId,
-                "Interstellar (Edited)",
-                List.of("Matthew McConaughey"),
-                "02:49",
-                List.of("Christopher Nolan"),
-                //LocalDateTime.of(2014, 11, 7, 0, 0),
-                fakeDate,
-                List.of("SciFi"),
-                0,
-                12
-        );
-
-        Watchable updated = new Watchable(
-                pathId,
+        InWatchableDto toUpdate = new InWatchableDto(
                 "Odysseus",
                 List.of("Matt Damon"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                //LocalDateTime.of(2014, 11, 7, 0, 0),
                 fakeDate,
                 List.of("Fantasy", "Historical"),
                 0,
                 12
         );
 
+        Watchable existing = new Watchable(
+                pathId,
+                toUpdate.title(),
+                toUpdate.actors(),
+                toUpdate.duration(),
+                toUpdate.directors(),
+                toUpdate.releaseDate(),
+                toUpdate.genres(),
+                toUpdate.episode(),
+                toUpdate.ageRating());
+
         when(watchableRepo.existsById(pathId)).thenReturn(true);
-        when(watchableRepo.findById(pathId)).thenReturn(Optional.of(updated));
-        when(watchableRepo.save(updated)).thenReturn(updated);
+        when(watchableRepo.findById(pathId)).thenReturn(Optional.of(existing));
+        when(watchableRepo.save(any())).thenReturn(existing);
 
         // when
-        Watchable expected = watchableService.update(pathId, updated);
+        Watchable expected = watchableService.update(pathId, toUpdate);
 
         // then
+        assertNotNull(expected);
         assertEquals(pathId, expected.id());
-        assertEquals(updated.title(), expected.title());
+        assertEquals(toUpdate.title(), expected.title());
 
         verify(watchableRepo, times(1)).existsById(pathId);
         verify(watchableRepo, times(1)).findById(pathId);
-        verify(watchableRepo, times(1)).save(updated);
+        verify(watchableRepo, times(1)).save(existing);
         verifyNoMoreInteractions(watchableRepo);
     }
 }

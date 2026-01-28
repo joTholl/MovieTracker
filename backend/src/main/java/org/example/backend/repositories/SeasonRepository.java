@@ -1,13 +1,12 @@
 package org.example.backend.repositories;
 
-import org.example.backend.models.Season;
+import org.example.backend.DTOs.SeasonWatchableIdDTO;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
-public interface SeasonRepository extends MongoRepository<Season,String> {
+public interface SeasonRepository extends MongoRepository<SeasonWatchableIdDTO,String> {
 
 
 }

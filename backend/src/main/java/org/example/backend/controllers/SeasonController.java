@@ -1,7 +1,7 @@
-package org.example.backend.controller;
+package org.example.backend.controllers;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.exceptions.ArgumentMismatchException;
+import org.example.backend.DTOs.SeasonInDTO;
 import org.example.backend.models.Season;
 import org.example.backend.services.SeasonService;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +26,13 @@ public class SeasonController {
     }
 
     @PostMapping
-    public Season createSeason(@RequestBody Season season) {
-        return seasonService.createSeason(season);
+    public Season createSeason(@RequestBody SeasonInDTO seasonInDTO) {
+        return seasonService.createSeason(seasonInDTO);
     }
 
     @PutMapping("/{id}")
-    public Season updateSeason(@PathVariable String id, @RequestBody Season season){
-        return seasonService.updateSeason(id, season);
+    public Season updateSeason(@PathVariable String id, @RequestBody SeasonInDTO seasonInDTO){
+        return seasonService.updateSeason(id, seasonInDTO);
     }
 
     @DeleteMapping("/{id}")

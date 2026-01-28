@@ -1,6 +1,5 @@
 package org.example.backend.exceptions;
 
-import org.example.backend.models.Season;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

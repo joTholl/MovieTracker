@@ -34,7 +34,10 @@ public class MovieService {
     }
 
     public Movie getMovieById(String id) {
-        return repo.findById(id).get();
+        if(!id.isEmpty()) {
+            return repo.findById(id).get();
+        }
+        return null;
     }
 
     /** Auskommentiert weil WatchableRepo noch fehlt

@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @With
-public record SeasonWatchableIdDTO(@Id String id, int seasonNumber, List<String> watchablesId, List<String> streamable) {
+public record SeasonWatchableIdDTO(@Id String id, int seasonNumber, List<String> watchablesId, List<String> streamables) {
 
     public SeasonWatchableIdDTO(Season season) {
         List<String> watchablesId = new ArrayList<>();
         for (Watchable watchable : season.watchables()) {
             watchablesId.add(watchable.id());
         }
-        this(season.id(), season.seasonNumber(), watchablesId, season.streamable());
+        this(season.id(), season.seasonNumber(), watchablesId, season.streamables());
     }
 }

@@ -1,9 +1,6 @@
 package org.example.backend.controllers;
 
-import lombok.AllArgsConstructor;
-import org.example.backend.DTOs.SeasonInDTO;
 import org.example.backend.DTOs.SeasonWatchableIdDTO;
-import org.example.backend.models.Season;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.example.backend.repositories.SeasonRepository;
@@ -21,17 +18,17 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AllArgsConstructor
 class SeasonControllerTest {
     @Autowired
-    private final MockMvc mockMvc;
+    private MockMvc mockMvc;
     @Autowired
-    private final SeasonRepository seasonRepository;
+    private SeasonRepository seasonRepository;
     @Autowired
-    private final WatchableRepository watchableRepository;
+    private WatchableRepository watchableRepository;
 
     private final Watchable watchable1 = new Watchable("abdhg12", "Inception", List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
             "2h 28m", List.of("Christopher Nolan"), LocalDate.of(2010, 7, 16), List.of("Sci-Fi", "Thriller", "Action"),
@@ -39,15 +36,11 @@ class SeasonControllerTest {
     private final Watchable watchable2 = new Watchable("sghdjd3254", "Inception2", List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
             "2h 34m", List.of("Christopher Nolan"), LocalDate.of(2016, 7, 16), List.of("Sci-Fi", "Thriller", "Action"),
             0, 12);
-    private final Season season1 = new Season("abc", 1, List.of(watchable1), List.of("www.something.com"));
-    private final Season season2 = new Season("dfg", 2, List.of(watchable2), List.of("www.anything.com"));
-
-    private final SeasonInDTO seasonInDTO1 = new SeasonInDTO(1, List.of(watchable1), List.of("www.something.com"));
 
     private final SeasonWatchableIdDTO swid1 = new SeasonWatchableIdDTO("abc", 1, List.of("abdhg12"), List.of("www.something.com"));
     private final SeasonWatchableIdDTO swid2 = new SeasonWatchableIdDTO("dfg", 2, List.of("sghdjd3254"), List.of("www.anything.com"));
 
-    private final String season1Json = """
+    private final String seasonJson1 = """
             {
               "id": "abc",
               "seasonNumber": 1,
@@ -70,11 +63,11 @@ class SeasonControllerTest {
                     "Thriller",
                     "Action"
                   ],
-                  "rating": 0,
+                  "episode": 0,
                   "ageRating": 12
                 }
               ],
-              "urls": ["www.something.com"]
+              "streamables": ["www.something.com"]
             }
             """;
     private final String bothSeasonsJson = """
@@ -100,11 +93,11 @@ class SeasonControllerTest {
                     "Thriller",
                     "Action"
                   ],
-                  "rating": 0,
+                  "episode": 0,
                   "ageRating": 12
                 }
               ],
-              "urls": ["www.something.com"]
+              "streamables": ["www.something.com"]
             },{
                       "id": "dfg",
                       "seasonNumber": 2,
@@ -127,12 +120,40 @@ class SeasonControllerTest {
                             "Thriller",
                             "Action"
                           ],
-                          "rating": 0,
+                          "episode": 0,
                           "ageRating": 12
                         }
                       ],
-                      "urls": ["www.anything.com"]
+                      "streamables": ["www.anything.com"]
                     }]""";
+    private final String seasonInDTOJson = """
+            {
+            "seasonNumber": 1,
+            "watchables": [
+              {
+                "id": "abdhg12",
+                "title": "Inception",
+                "actors": [
+                  "Leonardo DiCaprio",
+                  "Joseph Gordon-Levitt",
+                  "Elliot Page"
+                ],
+                "duration": "2h 28m",
+                "directors": [
+                  "Christopher Nolan"
+                ],
+                "releaseDate": "2010-07-16",
+                "genres": [
+                  "Sci-Fi",
+                  "Thriller",
+                  "Action"
+                ],
+                "episode": 0,
+                "ageRating": 12
+              }
+            ],
+            "streamables": ["www.something.com"]
+            }""";
 
     @BeforeEach
     void cleanDb() {
@@ -154,7 +175,7 @@ class SeasonControllerTest {
     void getSeasonById_shouldReturnSeason() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/seasons/abc"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(season1Json));
+                .andExpect(MockMvcResultMatchers.content().json(seasonJson1));
     }
 
     @Test
@@ -162,6 +183,42 @@ class SeasonControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/seasons/asgh356"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(result -> assertInstanceOf(NoSuchElementException.class, result.getResolvedException()));
+    }
+
+    @Test
+    void createSeason_shouldCreateSeason() throws Exception {
+        seasonRepository.deleteAll();
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/seasons").contentType(APPLICATION_JSON).content(seasonInDTOJson))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().json(seasonInDTOJson))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNotEmpty());
+    }
+
+    @Test
+    void updateSeason_shouldUpdateSeason() throws Exception {
+        String seasonInDTOJson2 = seasonInDTOJson.replace("Action", "Horror");
+        String seasonJson2 = seasonJson1.replace("Action", "Horror");
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/seasons/abc").contentType(APPLICATION_JSON).content(seasonInDTOJson2))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(seasonJson2));
+    }
+
+    @Test
+    void updateSeason_shouldReturn404_whenCalledWithWrongId() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/seasons/asgh356").contentType(APPLICATION_JSON).content(seasonInDTOJson))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void deleteSeasonById_shouldDeleteSeason() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/seasons/abc"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    void deleteSeasonById_shouldReturn404_whenCalledWithWrongId() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/seasons/asgh356"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
 

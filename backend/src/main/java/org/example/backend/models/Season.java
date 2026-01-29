@@ -10,18 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @With
-public record Season(@Id String id, int seasonNumber, List<Watchable> watchables, List<String> streamable) {
+public record Season(@Id String id, int seasonNumber, List<Watchable> watchables, List<String> streamables) {
 
     public Season(SeasonWatchableIdDTO swid, WatchableService watchableService) {
-        this(swid.id(), swid.seasonNumber(), new ArrayList<>(), swid.streamable());
+        List<Watchable> watchables = new ArrayList<>();
         for (String watchableId : swid.watchablesId()) {
             Watchable watchable = watchableService.getById(watchableId);
-            this.watchables.add(watchable);
+            watchables.add(watchable);
         }
+        this(swid.id(), swid.seasonNumber(), watchables, swid.streamables());
     }
 
     public Season(String id, SeasonInDTO seasonInDTO) {
-        this(id, seasonInDTO.seasonNumber(), seasonInDTO.watchables(), seasonInDTO.streamable());
+        this(id, seasonInDTO.seasonNumber(), seasonInDTO.watchables(), seasonInDTO.streamables());
 
     }
 }

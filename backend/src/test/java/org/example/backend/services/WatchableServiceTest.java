@@ -118,7 +118,7 @@ class WatchableServiceTest {
 
         // then
         assertNotNull(result);
-        assertEquals(result.directors(), result.directors());
+        assertEquals(result.directors(), saved.directors());
         verify(watchableRepo, times(1)).save(any());
         verifyNoMoreInteractions(watchableRepo);
     }

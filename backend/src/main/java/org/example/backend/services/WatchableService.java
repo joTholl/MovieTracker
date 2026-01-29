@@ -25,6 +25,10 @@ public class WatchableService {
 
     public Watchable getById(String id) {
 
+        if (id == null) {
+            throw new IdIsNullException(this.toString());
+        }
+
         return watchableRepository.findById(id)
                 .orElseThrow(() -> new WatchableNotFoundException(id));
     }
@@ -32,7 +36,7 @@ public class WatchableService {
     public Watchable create(WatchableInDto in) {
 
         if (in == null) {
-            throw new IdIsNullException(this.toString());
+            throw new IllegalArgumentException(this.toString() + "WatchableInDto is null");
         }
 
         UtilityFunctions utilityFunctions = new UtilityFunctions();
@@ -49,8 +53,7 @@ public class WatchableService {
             throw new IdIsNullException(this.toString());
         }
 
-        boolean exists = watchableRepository.existsById(id);
-        if (!exists) {
+        if (!watchableRepository.existsById(id)) {
             throw new WatchableNotFoundException(id);
         }
 
@@ -60,14 +63,12 @@ public class WatchableService {
 
     public Watchable update(String id, WatchableInDto in) {
 
-        if (id == null || in == null ) {
+        if (id == null){
             throw new IdIsNullException(this.toString());
         }
 
-        boolean exists = watchableRepository.existsById(id);
-
-        if (!exists) {
-            throw new WatchableNotFoundException(id);
+        if (in == null) {
+            throw new IllegalArgumentException(this.toString() + "WatchableInDto is null");
         }
 
         Watchable existing = watchableRepository.findById(id).orElseThrow(() -> new WatchableNotFoundException(id));

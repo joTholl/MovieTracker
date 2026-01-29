@@ -94,8 +94,8 @@ class WatchableServiceTest {
     }
 
     @Test
-    void create_throwsRuntimeException_whenInDtoIsNull() {
-        RuntimeException ex = assertThrows(IdIsNullException.class, () -> watchableService.create(null));
+    void create_throwsIllegalArgumentException_whenInDtoIsNull() {
+        RuntimeException ex = assertThrows(IllegalArgumentException.class, () -> watchableService.create(null));
 
         assertNotNull(ex);
     }
@@ -181,6 +181,13 @@ class WatchableServiceTest {
     }
 
     @Test
+    void update_throwsIllegalArgumentException_whenInDtoIsNull() {
+        RuntimeException ex = assertThrows(IllegalArgumentException.class, () -> watchableService.update(null, null));
+
+        assertNotNull(ex);
+    }
+
+    @Test
     void update_whenExists_overwritesExisting() {
         // given
         String pathId = "1";
@@ -219,7 +226,6 @@ class WatchableServiceTest {
         assertEquals(pathId, expected.id());
         assertEquals(toUpdate.title(), expected.title());
 
-        verify(watchableRepository, times(1)).existsById(pathId);
         verify(watchableRepository, times(1)).findById(pathId);
         verify(watchableRepository, times(1)).save(existing);
         verifyNoMoreInteractions(watchableRepository);

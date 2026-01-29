@@ -20,10 +20,14 @@ import java.time.Month;
 import java.util.List;
 
 import static com.mongodb.assertions.Assertions.*;
+import static org.apache.commons.lang3.StringUtils.contains;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest // must-have for integration testing
 @AutoConfigureMockMvc // must-have for integration testing
@@ -222,7 +226,12 @@ class WatchableControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Interstellar"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.duration").value("02:49"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.directors").value("Christopher Nolan"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.releaseDate").value(fakeDate.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.episode").value(0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ageRating").value(12))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.actors", org.hamcrest.Matchers.contains("Matthew McConaughey", "Anne Hathaway")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.directors", org.hamcrest.Matchers.contains("Christopher Nolan")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genres", org.hamcrest.Matchers.contains("SciFi", "Drama")))
                 .andReturn();
 
         Exception ex = result.getResolvedException();

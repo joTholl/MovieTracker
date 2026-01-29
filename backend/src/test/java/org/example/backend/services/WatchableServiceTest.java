@@ -3,7 +3,7 @@ package org.example.backend.services;
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.models.InWatchableDto;
 import org.example.backend.models.Watchable;
-import org.example.backend.repos.WatchableRepo;
+import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -22,8 +22,8 @@ class WatchableServiceTest {
 //    @InjectMocks
 //    private WatchableService watchableService;
 
-    WatchableRepo watchableRepo =  Mockito.mock(WatchableRepo.class);
-    WatchableService watchableService = new WatchableService(watchableRepo);
+    WatchableRepository watchableRepository =  Mockito.mock(WatchableRepository.class);
+    WatchableService watchableService = new WatchableService(watchableRepository);
 
     private final LocalDate fakeDate = LocalDate.of(2014, 6, 15);
 
@@ -45,7 +45,7 @@ class WatchableServiceTest {
 
         List<Watchable> expected = List.of(w1);
 
-        when(watchableRepo.findAll()).thenReturn(expected);
+        when(watchableRepository.findAll()).thenReturn(expected);
 
         // when
         List<Watchable> result = watchableService.getAll();
@@ -54,8 +54,8 @@ class WatchableServiceTest {
         assertEquals(1, result.size());
         assertEquals(w1, result.getFirst());
         assertEquals(expected, result);
-        verify(watchableRepo, times(1)).findAll();
-        verifyNoMoreInteractions(watchableRepo);
+        verify(watchableRepository, times(1)).findAll();
+        verifyNoMoreInteractions(watchableRepository);
     }
 
     @Test
@@ -74,15 +74,15 @@ class WatchableServiceTest {
                 12
         );
 
-        when(watchableRepo.findById("1")).thenReturn(Optional.of(expected));
+        when(watchableRepository.findById("1")).thenReturn(Optional.of(expected));
 
         // when
         Watchable result = watchableService.getById("1");
 
         // then
         assertEquals(expected, result);
-        verify(watchableRepo, times(1)).findById("1");
-        verifyNoMoreInteractions(watchableRepo);
+        verify(watchableRepository, times(1)).findById("1");
+        verifyNoMoreInteractions(watchableRepository);
     }
 
     @Test
@@ -110,7 +110,7 @@ class WatchableServiceTest {
                 toCreate.episode(),
                 toCreate.ageRating());
 
-        Mockito.when(watchableRepo.save(any())).thenReturn(saved);
+        Mockito.when(watchableRepository.save(any())).thenReturn(saved);
 
         // when
 
@@ -119,34 +119,34 @@ class WatchableServiceTest {
         // then
         assertNotNull(result);
         assertEquals(result.directors(), result.directors());
-        verify(watchableRepo, times(1)).save(any());
-        verifyNoMoreInteractions(watchableRepo);
+        verify(watchableRepository, times(1)).save(any());
+        verifyNoMoreInteractions(watchableRepository);
     }
 
     @Test
     void deleteById_whenExists_deletes() {
         // given
-        when(watchableRepo.existsById("1")).thenReturn(true);
+        when(watchableRepository.existsById("1")).thenReturn(true);
 
         // when
         watchableService.deleteById("1");
 
         // then
-        verify(watchableRepo, times(1)).existsById("1");
-        verify(watchableRepo, times(1)).deleteById("1");
-        verifyNoMoreInteractions(watchableRepo);
+        verify(watchableRepository, times(1)).existsById("1");
+        verify(watchableRepository, times(1)).deleteById("1");
+        verifyNoMoreInteractions(watchableRepository);
     }
 
     @Test
     void deleteById_whenMissing_throwsWatchableNotFoundException() {
         // given
-        when(watchableRepo.existsById("1")).thenReturn(false);
+        when(watchableRepository.existsById("1")).thenReturn(false);
 
         // when - then
         assertThrows(WatchableNotFoundException.class, () -> watchableService.deleteById("1"));
-        verify(watchableRepo, times(1)).existsById("1");
-        verify(watchableRepo, never()).deleteById(anyString());
-        verifyNoMoreInteractions(watchableRepo);
+        verify(watchableRepository, times(1)).existsById("1");
+        verify(watchableRepository, never()).deleteById(anyString());
+        verifyNoMoreInteractions(watchableRepository);
     }
 
     @Test
@@ -176,9 +176,9 @@ class WatchableServiceTest {
                 toUpdate.episode(),
                 toUpdate.ageRating());
 
-        when(watchableRepo.existsById(pathId)).thenReturn(true);
-        when(watchableRepo.findById(pathId)).thenReturn(Optional.of(existing));
-        when(watchableRepo.save(any())).thenReturn(existing);
+        when(watchableRepository.existsById(pathId)).thenReturn(true);
+        when(watchableRepository.findById(pathId)).thenReturn(Optional.of(existing));
+        when(watchableRepository.save(any())).thenReturn(existing);
 
         // when
         Watchable expected = watchableService.update(pathId, toUpdate);
@@ -188,9 +188,9 @@ class WatchableServiceTest {
         assertEquals(pathId, expected.id());
         assertEquals(toUpdate.title(), expected.title());
 
-        verify(watchableRepo, times(1)).existsById(pathId);
-        verify(watchableRepo, times(1)).findById(pathId);
-        verify(watchableRepo, times(1)).save(existing);
-        verifyNoMoreInteractions(watchableRepo);
+        verify(watchableRepository, times(1)).existsById(pathId);
+        verify(watchableRepository, times(1)).findById(pathId);
+        verify(watchableRepository, times(1)).save(existing);
+        verifyNoMoreInteractions(watchableRepository);
     }
 }

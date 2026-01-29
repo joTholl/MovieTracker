@@ -1,8 +1,7 @@
 package org.example.backend.controllers;
 
-import org.example.backend.models.InWatchableDto;
 import org.example.backend.models.Watchable;
-import org.example.backend.repos.WatchableRepo;
+import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,11 +29,11 @@ class WatchableControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private WatchableRepo watchableRepo;
+    private WatchableRepository watchableRepository;
 
     @BeforeEach
     void cleanDb() {
-        watchableRepo.deleteAll(); // ensures every test starts from empty DB
+        watchableRepository.deleteAll(); // ensures every test starts from empty DB
     }
 
     private final LocalDate fakeDate = LocalDate.of(2014, 6, 15);
@@ -58,7 +55,7 @@ class WatchableControllerTest {
                 12
         );
 
-        watchableRepo.save(w1);
+        watchableRepository.save(w1);
 
         ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(        """
                                 [
@@ -101,7 +98,7 @@ class WatchableControllerTest {
                 12
         );
 
-        watchableRepo.save(w1);
+        watchableRepository.save(w1);
 
         ResultMatcher jsonMatch = MockMvcResultMatchers.content().json("""
                 {

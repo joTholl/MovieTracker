@@ -1,7 +1,10 @@
 package org.example.backend.helpers;
 
+import org.springframework.stereotype.Service;
+
 import java.util.UUID;
 
+@Service
 public class UtilityFunctions {
 
     public String createId(){

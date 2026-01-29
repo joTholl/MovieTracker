@@ -1,8 +1,9 @@
 package org.example.backend.services;
 
 import org.example.backend.models.Movie;
-import org.example.backend.models.MovieDto;
-import org.example.backend.repositorys.MovieRepo;
+import org.example.backend.DTOs.MovieDto;
+import org.example.backend.repositories.MovieRepository;
+import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,8 +16,10 @@ import static org.mockito.Mockito.*;
 
 public class MovieServiceTests {
 
-    private final MovieRepo mockRepo = mock(MovieRepo.class);
-    private final MovieService service = new MovieService(mockRepo);
+    private final MovieRepository mockRepo = mock(MovieRepository.class);
+    private final WatchableRepository mockRepoWatchable = mock(WatchableRepository.class);
+    private final WatchableService watchableService = new WatchableService(mockRepoWatchable);
+    private final MovieService service = new MovieService(mockRepo, watchableService);
 
     @Test
     void getMovieById_ShouldReturnSearchedMovie() {

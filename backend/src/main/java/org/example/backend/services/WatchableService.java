@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.exceptions.IdIsNullException;
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.DTOs.WatchableInDto;
@@ -24,7 +25,7 @@ public class WatchableService {
 
     public Watchable getById(String id) {
         if(id == null) {
-            throw new RuntimeException("cannot find watchable with null id");
+            throw new IdIsNullException(this.toString());
         }
         return watchableRepository.findById(id)
                 .orElseThrow(() -> new WatchableNotFoundException(id));
@@ -33,7 +34,7 @@ public class WatchableService {
     public Watchable create(WatchableInDto in) {
 
         if (in == null) {
-            throw new RuntimeException("cannot create Watchable with null InWatchableDto");
+            throw new IdIsNullException(this.toString());
         }
 
         UtilityFunctions utilityFunctions = new UtilityFunctions();
@@ -47,7 +48,7 @@ public class WatchableService {
     public boolean deleteById(String id) {
 
         if(id == null){
-            throw new RuntimeException("cannot delete Watchable with null id");
+            throw new IdIsNullException(this.toString());
         }
 
         boolean exists = watchableRepository.existsById(id);
@@ -62,7 +63,7 @@ public class WatchableService {
     public Watchable update(String id, WatchableInDto in) {
 
         if (id == null || in == null ) {
-            throw new RuntimeException("cannot update Watchable with null id || null InWatchableDto");
+            throw new IdIsNullException(this.toString());
         }
 
         boolean exists = watchableRepository.existsById(id);

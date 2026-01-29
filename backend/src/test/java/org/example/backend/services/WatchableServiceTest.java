@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.exceptions.IdIsNullException;
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.DTOs.WatchableInDto;
 import org.example.backend.models.Watchable;
@@ -59,11 +60,10 @@ class WatchableServiceTest {
     }
 
     @Test
-    void getById_throwsRuntimeException_whenIdIsNull() {
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> watchableService.getById(null));
+    void getById_throwsIdIsNullException_whenIdIsNull() {
+        RuntimeException ex = assertThrows(IdIsNullException.class, () -> watchableService.getById(null));
 
         assertNotNull(ex);
-        assertEquals("cannot find watchable with null id", ex.getMessage());
     }
 
     @Test
@@ -95,10 +95,9 @@ class WatchableServiceTest {
 
     @Test
     void create_throwsRuntimeException_whenInDtoIsNull() {
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> watchableService.create(null));
+        RuntimeException ex = assertThrows(IdIsNullException.class, () -> watchableService.create(null));
 
         assertNotNull(ex);
-        assertEquals("cannot create Watchable with null InWatchableDto", ex.getMessage());
     }
 
     @Test
@@ -140,10 +139,10 @@ class WatchableServiceTest {
     }
 
     @Test
-    void deleteById_whenIdNull_throwsRuntimeException() {
+    void deleteById_whenIdIsNull_throwsIdIsNullException() {
 
         // when - then
-        assertThrows(RuntimeException.class, () -> watchableService.deleteById(null));
+        assertThrows(IdIsNullException.class, () -> watchableService.deleteById(null));
         verify(watchableRepository, never()).deleteById(anyString());
         verifyNoMoreInteractions(watchableRepository);
     }
@@ -175,11 +174,10 @@ class WatchableServiceTest {
     }
 
     @Test
-    void update_throwsRuntimeException_whenIdIsNull() {
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> watchableService.update(null, null));
+    void update_throwsIdIsNullException_whenIdIsNull() {
+        RuntimeException ex = assertThrows(IdIsNullException.class, () -> watchableService.update(null, null));
 
         assertNotNull(ex);
-        assertEquals("cannot update Watchable with null id || null InWatchableDto", ex.getMessage());
     }
 
     @Test

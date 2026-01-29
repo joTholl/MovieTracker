@@ -2,12 +2,11 @@ package org.example.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.With;
+import org.example.backend.DTOs.WatchableInDto;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "Watchable")
@@ -24,7 +23,7 @@ public record Watchable(
         int episode,
         int ageRating) {
 
-        public Watchable(String id, InWatchableDto inDto) {
+        public Watchable(String id, WatchableInDto inDto) {
                 this(
                         id,
                         inDto.title(),

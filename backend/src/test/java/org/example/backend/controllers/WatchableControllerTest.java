@@ -1,20 +1,14 @@
 package org.example.backend.controllers;
 
 import org.example.backend.exceptions.WatchableNotFoundException;
-import org.example.backend.models.InWatchableDto;
 import org.example.backend.models.Watchable;
-import org.example.backend.repos.WatchableRepo;
-import org.example.backend.services.WatchableService;
+import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -39,11 +33,11 @@ class WatchableControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private WatchableRepo watchableRepo;
+    private WatchableRepository watchableRepository;
 
     @BeforeEach
     void cleanDb() {
-        watchableRepo.deleteAll(); // ensures every test starts from empty DB
+        watchableRepository.deleteAll(); // ensures every test starts from empty DB
     }
 
     private final LocalDate fakeDate = LocalDate.of(2014, 6, 15);
@@ -65,7 +59,7 @@ class WatchableControllerTest {
                 12
         );
 
-        watchableRepo.save(w1);
+        watchableRepository.save(w1);
 
         ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(
                                 """
@@ -109,7 +103,7 @@ class WatchableControllerTest {
                 12
         );
 
-        watchableRepo.save(w1);
+        watchableRepository.save(w1);
 
         ResultMatcher jsonMatch = MockMvcResultMatchers.content().json("""
                 {
@@ -173,7 +167,7 @@ class WatchableControllerTest {
                 12
         );
 
-        watchableRepo.save(w1);
+        watchableRepository.save(w1);
         mockMvc.perform(delete("/api/watchables/1"))
                 .andExpect(status().isNoContent());
     }
@@ -208,7 +202,7 @@ class WatchableControllerTest {
                 12
         );
 
-        watchableRepo.save(w1);
+        watchableRepository.save(w1);
 
         MvcResult result = mockMvc.perform(put("/api/watchables/1")
                         .contentType(MediaType.APPLICATION_JSON)

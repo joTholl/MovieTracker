@@ -24,9 +24,7 @@ public class WatchableService {
     }
 
     public Watchable getById(String id) {
-        if(id == null) {
-            throw new IdIsNullException(this.toString());
-        }
+
         return watchableRepository.findById(id)
                 .orElseThrow(() -> new WatchableNotFoundException(id));
     }
@@ -75,7 +73,6 @@ public class WatchableService {
         Watchable existing = watchableRepository.findById(id).orElseThrow(() -> new WatchableNotFoundException(id));
 
         Watchable toSave = existing
-                //.withId(id)
                 .withTitle(in.title())
                 .withActors(in.actors())
                 .withDirectors(in.directors())

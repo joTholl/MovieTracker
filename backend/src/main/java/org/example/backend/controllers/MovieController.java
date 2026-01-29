@@ -1,11 +1,11 @@
 package org.example.backend.controllers;
 
+import org.example.backend.DTOs.MovieOutDto;
 import org.example.backend.models.Movie;
-import org.example.backend.models.MovieDto;
+import org.example.backend.DTOs.MovieDto;
 import org.example.backend.services.MovieService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -19,14 +19,16 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<Movie> getAllMovies() {
+    public List<MovieOutDto> getAllMovies() {
         return service.getAllMovies();
     }
 
     @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable String id) {
-        return service.getMovieById(id);
+    public MovieOutDto getMovieOutDtoById(@PathVariable String id) {
+        return service.getMovieOutDtoById(id);
     }
+
+
 
     /**
     @GetMapping("/title/{title}")

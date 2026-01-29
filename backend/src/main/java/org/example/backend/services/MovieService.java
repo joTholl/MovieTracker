@@ -1,21 +1,24 @@
 package org.example.backend.services;
 
+import org.example.backend.DTOs.MovieOutDto;
 import org.example.backend.models.Movie;
-import org.example.backend.models.MovieDto;
-import org.example.backend.repositorys.MovieRepo;
+import org.example.backend.DTOs.MovieDto;
+import org.example.backend.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 public class MovieService {
-    private final MovieRepo repo;
+    private final MovieRepository repo;
+    private final WatchableService watchableService;
 
-    public MovieService(MovieRepo repo) {
+    public MovieService(MovieRepository repo, WatchableService watchableService) {
         this.repo = repo;
+        this.watchableService = watchableService;
     }
 
     public String randomId() {
@@ -29,16 +32,26 @@ public class MovieService {
     }
 
 
-    public List<Movie> getAllMovies() {
-        return repo.findAll();
+    public List<MovieOutDto> getAllMovies() {
+        List<Movie> allMovies = repo.findAll();
+        List<MovieOutDto> returnList = new ArrayList<>();
+
+        for(Movie movie : allMovies) {
+            returnList.add(new MovieOutDto(movie, watchableService));
+        }
+
+        return returnList;
     }
 
     public Movie getMovieById(String id) {
         if(id == null || id.isEmpty()) return null;
 
         return repo.findById(id).orElse(null);
+    }
 
-
+    public MovieOutDto getMovieOutDtoById(String id) {
+        Movie movie = getMovieById(id);
+        return new MovieOutDto(movie, watchableService);
     }
 
     /** Auskommentiert weil WatchableRepo noch fehlt

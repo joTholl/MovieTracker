@@ -59,6 +59,14 @@ class WatchableServiceTest {
     }
 
     @Test
+    void getById_throwsRuntimeException_whenIdIsNull() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> watchableService.getById(null));
+
+        assertNotNull(ex);
+        assertEquals("cannot find watchable with null id", ex.getMessage());
+    }
+
+    @Test
     void getById_whenFound_returnsWatchable() {
         // given
         Watchable expected = new Watchable(
@@ -83,6 +91,14 @@ class WatchableServiceTest {
         assertEquals(expected, result);
         verify(watchableRepository, times(1)).findById("1");
         verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
+    void create_throwsRuntimeException_whenInDtoIsNull() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> watchableService.create(null));
+
+        assertNotNull(ex);
+        assertEquals("cannot create Watchable with null InWatchableDto", ex.getMessage());
     }
 
     @Test
@@ -124,6 +140,15 @@ class WatchableServiceTest {
     }
 
     @Test
+    void deleteById_whenIdNull_throwsRuntimeException() {
+
+        // when - then
+        assertThrows(RuntimeException.class, () -> watchableService.deleteById(null));
+        verify(watchableRepository, never()).deleteById(anyString());
+        verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
     void deleteById_whenExists_deletes() {
         // given
         when(watchableRepository.existsById("1")).thenReturn(true);
@@ -148,6 +173,8 @@ class WatchableServiceTest {
         verify(watchableRepository, never()).deleteById(anyString());
         verifyNoMoreInteractions(watchableRepository);
     }
+
+
 
     @Test
     void update_whenExists_overwritesExisting() {

@@ -1,6 +1,6 @@
 package org.example.backend.controllers;
 
-import org.example.backend.DTOs.WatchableInDto;
+import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.services.WatchableService;
 import org.springframework.http.HttpStatus;

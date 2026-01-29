@@ -2,7 +2,7 @@ package org.example.backend.services;
 
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.helpers.UtilityFunctions;
-import org.example.backend.DTOs.WatchableInDto;
+import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.springframework.stereotype.Service;

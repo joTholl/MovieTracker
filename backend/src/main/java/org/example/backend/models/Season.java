@@ -1,8 +1,8 @@
 package org.example.backend.models;
 
 import lombok.With;
-import org.example.backend.DTOs.SeasonInDTO;
-import org.example.backend.DTOs.SeasonWatchableIdDTO;
+import org.example.backend.dtos.SeasonInDTO;
+import org.example.backend.dtos.SeasonWatchableIdDTO;
 import org.example.backend.services.WatchableService;
 import org.springframework.data.annotation.Id;
 

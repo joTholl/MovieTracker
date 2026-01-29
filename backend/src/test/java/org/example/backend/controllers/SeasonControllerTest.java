@@ -1,6 +1,6 @@
 package org.example.backend.controllers;
 
-import org.example.backend.DTOs.SeasonWatchableIdDTO;
+import org.example.backend.dtos.SeasonWatchableIdDTO;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.example.backend.repositories.SeasonRepository;

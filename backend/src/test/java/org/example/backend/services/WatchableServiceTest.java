@@ -1,7 +1,7 @@
 package org.example.backend.services;
 
 import org.example.backend.exceptions.WatchableNotFoundException;
-import org.example.backend.DTOs.WatchableInDto;
+import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;

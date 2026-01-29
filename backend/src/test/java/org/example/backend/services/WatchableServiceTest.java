@@ -174,7 +174,13 @@ class WatchableServiceTest {
         verifyNoMoreInteractions(watchableRepository);
     }
 
+    @Test
+    void update_throwsRuntimeException_whenIdIsNull() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> watchableService.update(null, null));
 
+        assertNotNull(ex);
+        assertEquals("cannot update Watchable with null id || null InWatchableDto", ex.getMessage());
+    }
 
     @Test
     void update_whenExists_overwritesExisting() {

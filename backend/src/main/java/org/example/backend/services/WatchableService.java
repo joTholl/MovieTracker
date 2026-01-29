@@ -61,8 +61,8 @@ public class WatchableService {
 
     public Watchable update(String id, WatchableInDto in) {
 
-        if (in == null) {
-            throw new RuntimeException("cannot update Watchable with null InWatchableDto");
+        if (id == null || in == null ) {
+            throw new RuntimeException("cannot update Watchable with null id || null InWatchableDto");
         }
 
         boolean exists = watchableRepository.existsById(id);

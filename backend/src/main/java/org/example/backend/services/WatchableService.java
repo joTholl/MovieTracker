@@ -4,7 +4,7 @@ import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.models.InWatchableDto;
 import org.example.backend.models.Watchable;
-import org.example.backend.repos.WatchableRepo;
+import org.example.backend.repositories.WatchableRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,18 +12,18 @@ import java.util.List;
 @Service
 public class WatchableService {
 
-    private final WatchableRepo watchableRepo;
+    private final WatchableRepository watchableRepository;
 
-    public WatchableService(WatchableRepo watchableRepo) {
-        this.watchableRepo = watchableRepo;
+    public WatchableService(WatchableRepository watchableRepository) {
+        this.watchableRepository = watchableRepository;
     }
 
     public List<Watchable> getAll() {
-        return watchableRepo.findAll();
+        return watchableRepository.findAll();
     }
 
     public Watchable getById(String id) {
-        return watchableRepo.findById(id)
+        return watchableRepository.findById(id)
                 .orElseThrow(() -> new WatchableNotFoundException(id));
     }
 
@@ -43,27 +43,27 @@ public class WatchableService {
                 in.episode(),
                 in.ageRating());
 
-        return watchableRepo.save(newWatchable);
+        return watchableRepository.save(newWatchable);
     }
 
     public void deleteById(String id) {
 
-        boolean exists = watchableRepo.existsById(id);
+        boolean exists = watchableRepository.existsById(id);
 
         if (!exists) {
             throw new WatchableNotFoundException(id);
         }
-        watchableRepo.deleteById(id);
+        watchableRepository.deleteById(id);
     }
 
     public Watchable update(String id, InWatchableDto in) {
-        boolean exists = watchableRepo.existsById(id);
+        boolean exists = watchableRepository.existsById(id);
 
         if (!exists) {
             throw new WatchableNotFoundException(id);
         }
 
-        Watchable existing = watchableRepo.findById(id).orElseThrow(() -> new WatchableNotFoundException(id));
+        Watchable existing = watchableRepository.findById(id).orElseThrow(() -> new WatchableNotFoundException(id));
 
         Watchable toSave = existing
                 .withId(id)
@@ -76,6 +76,6 @@ public class WatchableService {
                 .withEpisode(in.episode())
                 .withAgeRating(in.ageRating());
 
-        return watchableRepo.save(toSave);
+        return watchableRepository.save(toSave);
     }
 }

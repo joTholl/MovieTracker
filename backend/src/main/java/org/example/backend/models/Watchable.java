@@ -2,7 +2,7 @@ package org.example.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.With;
-import org.example.backend.DTOs.WatchableInDto;
+import org.example.backend.dtos.WatchableInDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

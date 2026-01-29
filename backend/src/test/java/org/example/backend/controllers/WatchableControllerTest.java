@@ -20,14 +20,10 @@ import java.time.Month;
 import java.util.List;
 
 import static com.mongodb.assertions.Assertions.*;
-import static org.apache.commons.lang3.StringUtils.contains;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.hamcrest.Matchers.*;
 
 @SpringBootTest // must-have for integration testing
 @AutoConfigureMockMvc // must-have for integration testing

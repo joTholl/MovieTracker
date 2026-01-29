@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.backend.DTOs.SeasonInDTO;
 import org.example.backend.DTOs.SeasonWatchableIdDTO;
 import org.example.backend.exceptions.ArgumentMismatchException;
+import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.models.InWatchableDto;
 import org.example.backend.models.Season;
 import org.example.backend.models.Watchable;
@@ -20,6 +21,7 @@ public class SeasonService {
 
     private final SeasonRepository seasonRepository;
     private final WatchableService watchableService;
+    private final UtilityFunctions utilityFunctions;
 
     public List<Season> getAllSeasons() {
         List<SeasonWatchableIdDTO> seasonWatchableIdDTOs = seasonRepository.findAll();
@@ -36,7 +38,8 @@ public class SeasonService {
     }
 
     public Season createSeason(SeasonInDTO seasonInDTO) {
-        Season season = new Season(seasonInDTO);
+        String id = utilityFunctions.createId();
+        Season season = new Season(id,seasonInDTO);
         for (Watchable watchable : season.watchables()) {
             watchableService.create(new InWatchableDto(watchable));
         }
@@ -51,7 +54,7 @@ public class SeasonService {
         for (Watchable watchable : seasonInDTO.watchables()) {
             watchableService.update(watchable.id(), new InWatchableDto(watchable));
         }
-        Season season = new Season(seasonInDTO);
+        Season season = new Season(id, seasonInDTO);
         SeasonWatchableIdDTO swid = seasonRepository.save(new SeasonWatchableIdDTO(season));
         return getSeasonById(swid.id());
     }

@@ -9,8 +9,6 @@ import org.springframework.data.annotation.Id;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.UUID.randomUUID;
-
 @With
 public record Season(@Id String id, int seasonNumber, List<Watchable> watchables, List<String> streamable) {
 
@@ -22,8 +20,8 @@ public record Season(@Id String id, int seasonNumber, List<Watchable> watchables
         }
     }
 
-    public Season(SeasonInDTO seasonInDTO) {
-        this(randomUUID().toString(), seasonInDTO.seasonNumber(), seasonInDTO.watchables(), seasonInDTO.streamable());
+    public Season(String id, SeasonInDTO seasonInDTO) {
+        this(id, seasonInDTO.seasonNumber(), seasonInDTO.watchables(), seasonInDTO.streamable());
 
     }
 }

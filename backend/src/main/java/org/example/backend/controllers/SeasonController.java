@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import org.example.backend.DTOs.SeasonInDTO;
 import org.example.backend.models.Season;
 import org.example.backend.services.SeasonService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/season")
+@RequestMapping("/api/seasons")
 @AllArgsConstructor
 public class SeasonController {
 
@@ -26,6 +27,7 @@ public class SeasonController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Season createSeason(@RequestBody SeasonInDTO seasonInDTO) {
         return seasonService.createSeason(seasonInDTO);
     }
@@ -36,6 +38,7 @@ public class SeasonController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSeason(@PathVariable String id){
         seasonService.deleteSeason(id);
     }

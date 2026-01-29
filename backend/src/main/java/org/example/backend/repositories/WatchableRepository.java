@@ -1,9 +1,9 @@
-package org.example.backend.repos;
+package org.example.backend.repositories;
 
 import org.example.backend.models.Watchable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WatchableRepo extends MongoRepository<Watchable, String> {
+public interface WatchableRepository extends MongoRepository<Watchable, String> {
 }

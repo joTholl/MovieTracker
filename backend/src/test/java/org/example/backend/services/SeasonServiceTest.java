@@ -3,7 +3,7 @@ package org.example.backend.services;
 import org.example.backend.DTOs.SeasonInDTO;
 import org.example.backend.DTOs.SeasonWatchableIdDTO;
 import org.example.backend.helpers.UtilityFunctions;
-import org.example.backend.models.InWatchableDto;
+import org.example.backend.DTOs.WatchableInDto;
 import org.example.backend.models.Season;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.SeasonRepository;
@@ -70,7 +70,7 @@ class SeasonServiceTest {
     @Test
     void createSeason_shouldCreateSeason() {
         when(utilityFunctionsMock.createId()).thenReturn("abc");
-        when(watchableServiceMock.create(new InWatchableDto(watchable1))).thenReturn(watchable1);
+        when(watchableServiceMock.create(new WatchableInDto(watchable1))).thenReturn(watchable1);
         when(seasonRepositoryMock.save(swid1)).thenReturn(swid1);
         when(seasonRepositoryMock.findById("abc")).thenReturn(Optional.of(swid1));
         when(watchableServiceMock.getById("abdhg12")).thenReturn(watchable1);

@@ -5,7 +5,7 @@ import org.example.backend.DTOs.SeasonInDTO;
 import org.example.backend.DTOs.SeasonWatchableIdDTO;
 import org.example.backend.exceptions.ArgumentMismatchException;
 import org.example.backend.helpers.UtilityFunctions;
-import org.example.backend.models.InWatchableDto;
+import org.example.backend.DTOs.WatchableInDto;
 import org.example.backend.models.Season;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.SeasonRepository;
@@ -41,7 +41,7 @@ public class SeasonService {
         String id = utilityFunctions.createId();
         Season season = new Season(id,seasonInDTO);
         for (Watchable watchable : season.watchables()) {
-            watchableService.create(new InWatchableDto(watchable));
+            watchableService.create(new WatchableInDto(watchable));
         }
         SeasonWatchableIdDTO swid = seasonRepository.save(new SeasonWatchableIdDTO(season));
         return getSeasonById(swid.id());
@@ -52,7 +52,7 @@ public class SeasonService {
             throw new NoSuchElementException("Id not found");
         }
         for (Watchable watchable : seasonInDTO.watchables()) {
-            watchableService.update(watchable.id(), new InWatchableDto(watchable));
+            watchableService.update(watchable.id(), new WatchableInDto(watchable));
         }
         Season season = new Season(id, seasonInDTO);
         SeasonWatchableIdDTO swid = seasonRepository.save(new SeasonWatchableIdDTO(season));

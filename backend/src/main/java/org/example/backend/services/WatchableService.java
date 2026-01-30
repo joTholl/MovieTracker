@@ -2,7 +2,7 @@ package org.example.backend.services;
 
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.helpers.UtilityFunctions;
-import org.example.backend.models.InWatchableDto;
+import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class WatchableService {
                 .orElseThrow(() -> new WatchableNotFoundException(id));
     }
 
-    public Watchable create(InWatchableDto in) {
+    public Watchable create(WatchableInDto in) {
 
         UtilityFunctions utilityFunctions = new UtilityFunctions();
         String id = utilityFunctions.createId();
@@ -56,7 +56,7 @@ public class WatchableService {
         watchableRepository.deleteById(id);
     }
 
-    public Watchable update(String id, InWatchableDto in) {
+    public Watchable update(String id, WatchableInDto in) {
         boolean exists = watchableRepository.existsById(id);
 
         if (!exists) {

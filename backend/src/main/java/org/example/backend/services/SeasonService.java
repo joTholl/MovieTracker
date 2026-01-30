@@ -46,8 +46,8 @@ public class SeasonService {
             watchables.add(w);
         }
         Season season = new Season(id, seasonInDTO.seasonNumber(), watchables, seasonInDTO.streamables());
-        SeasonWatchableIdDTO swid = seasonRepository.save(new SeasonWatchableIdDTO(season));
-        return getSeasonById(swid.id());
+        seasonRepository.save(new SeasonWatchableIdDTO(season));
+        return season;
     }
 
 

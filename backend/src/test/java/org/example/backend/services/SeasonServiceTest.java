@@ -78,12 +78,10 @@ class SeasonServiceTest {
         when(utilityFunctionsMock.createId()).thenReturn("abc");
         when(watchableServiceMock.create(new WatchableInDto(watchable1))).thenReturn(watchable1);
         when(seasonRepositoryMock.save(swid1)).thenReturn(swid1);
-        when(seasonRepositoryMock.findById("abc")).thenReturn(Optional.of(swid1));
-        when(watchableServiceMock.getById("abdhg12")).thenReturn(watchable1);
         Season season = seasonService.createSeason(seasonInDTO1);
         verify(seasonRepositoryMock).save(swid1);
-        verify(seasonRepositoryMock).findById("abc");
-        verify(watchableServiceMock).getById("abdhg12");
+        verify(watchableServiceMock).create(new WatchableInDto(watchable1));
+        verify(utilityFunctionsMock).createId();
         assertEquals(season, season1);
 
     }

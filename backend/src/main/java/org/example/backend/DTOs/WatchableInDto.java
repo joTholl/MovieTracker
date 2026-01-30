@@ -1,4 +1,6 @@
-package org.example.backend.DTOs;
+package org.example.backend.dtos;
+
+import org.example.backend.models.Watchable;
 
 import java.time.LocalDate;
 import java.util.List;

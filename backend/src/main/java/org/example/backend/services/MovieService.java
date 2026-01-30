@@ -5,7 +5,6 @@ import org.example.backend.models.MovieDto;
 import org.example.backend.repositorys.MovieRepo;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;

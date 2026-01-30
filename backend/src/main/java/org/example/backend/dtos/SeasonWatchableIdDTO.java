@@ -18,4 +18,5 @@ public record SeasonWatchableIdDTO(@Id String id, int seasonNumber, List<String>
         }
         this(season.id(), season.seasonNumber(), watchablesId, season.streamables());
     }
+
 }

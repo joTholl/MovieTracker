@@ -23,6 +23,5 @@ public record Season(@Id String id, int seasonNumber, List<Watchable> watchables
 
     public Season(String id, SeasonInDTO seasonInDTO) {
         this(id, seasonInDTO.seasonNumber(), seasonInDTO.watchables(), seasonInDTO.streamables());
-
     }
 }

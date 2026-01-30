@@ -41,8 +41,12 @@ public class WatchableController {
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable String id) {
-        watchableService.deleteById(id);
-        return ResponseEntity.noContent().build();
+
+       if (watchableService.deleteById(id)){
+           return ResponseEntity.noContent().build();
+       }
+
+       return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
     // PUT

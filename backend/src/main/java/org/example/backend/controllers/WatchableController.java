@@ -1,6 +1,6 @@
 package org.example.backend.controllers;
 
-import org.example.backend.models.InWatchableDto;
+import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.services.WatchableService;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class WatchableController {
 
     // POST
     @PostMapping
-    public ResponseEntity<Watchable> create(@RequestBody InWatchableDto in) {
+    public ResponseEntity<Watchable> create(@RequestBody WatchableInDto in) {
         Watchable createdWatchable = watchableService.create(in);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWatchable);
     }
@@ -47,7 +47,7 @@ public class WatchableController {
 
     // PUT
     @PutMapping("/{id}")
-    public Watchable update(@PathVariable String id, @RequestBody InWatchableDto in) {
+    public Watchable update(@PathVariable String id, @RequestBody WatchableInDto in) {
         return watchableService.update(id, in);
     }
 }

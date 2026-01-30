@@ -1,7 +1,7 @@
 package org.example.backend.services;
 
 import org.example.backend.exceptions.WatchableNotFoundException;
-import org.example.backend.models.InWatchableDto;
+import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;
@@ -88,7 +88,7 @@ class WatchableServiceTest {
     @Test
     void create_savesAndReturnsSavedWatchable() {
         // given
-        InWatchableDto toCreate = new InWatchableDto(
+        WatchableInDto toCreate = new WatchableInDto(
                 "Interstellar",
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
@@ -154,7 +154,7 @@ class WatchableServiceTest {
         // given
         String pathId = "1";
 
-        InWatchableDto toUpdate = new InWatchableDto(
+        WatchableInDto toUpdate = new WatchableInDto(
                 "Odysseus",
                 List.of("Matt Damon"),
                 "02:49",

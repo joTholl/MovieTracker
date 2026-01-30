@@ -1,4 +1,4 @@
-package org.example.backend.DTOs;
+package org.example.backend.dtos;
 
 import java.util.List;
 

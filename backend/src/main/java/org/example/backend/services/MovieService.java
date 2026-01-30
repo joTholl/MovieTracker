@@ -1,9 +1,9 @@
 package org.example.backend.services;
 
-import org.example.backend.DTOs.MovieOutDto;
+import org.example.backend.dtos.MovieOutDto;
 import org.example.backend.exceptions.MovieNotFoundException;
 import org.example.backend.models.Movie;
-import org.example.backend.DTOs.MovieInDto;
+import org.example.backend.dtos.MovieInDto;
 import org.example.backend.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 

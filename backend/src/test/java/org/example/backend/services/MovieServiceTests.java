@@ -2,7 +2,7 @@ package org.example.backend.services;
 
 import org.example.backend.exceptions.MovieNotFoundException;
 import org.example.backend.models.Movie;
-import org.example.backend.DTOs.MovieInDto;
+import org.example.backend.dtos.MovieInDto;
 import org.example.backend.repositories.MovieRepository;
 import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;

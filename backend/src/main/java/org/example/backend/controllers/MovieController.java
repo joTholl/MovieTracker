@@ -1,8 +1,8 @@
 package org.example.backend.controllers;
 
-import org.example.backend.DTOs.MovieOutDto;
+import org.example.backend.dtos.MovieOutDto;
 import org.example.backend.models.Movie;
-import org.example.backend.DTOs.MovieInDto;
+import org.example.backend.dtos.MovieInDto;
 import org.example.backend.services.MovieService;
 import org.springframework.web.bind.annotation.*;
 

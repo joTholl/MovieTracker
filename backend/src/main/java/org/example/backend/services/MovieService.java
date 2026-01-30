@@ -1,6 +1,7 @@
 package org.example.backend.services;
 
 import org.example.backend.DTOs.MovieOutDto;
+import org.example.backend.exceptions.MovieNotFoundException;
 import org.example.backend.models.Movie;
 import org.example.backend.DTOs.MovieDto;
 import org.example.backend.repositories.MovieRepository;
@@ -44,9 +45,7 @@ public class MovieService {
     }
 
     public Movie getMovieById(String id) {
-        if(id == null || id.isEmpty()) return null;
-
-        return repo.findById(id).orElse(null);
+        return repo.findById(id).orElseThrow(() -> new MovieNotFoundException(id));
     }
 
     public MovieOutDto getMovieOutDtoById(String id) {
@@ -91,11 +90,7 @@ public class MovieService {
     }
 
     public Movie changeMovie(String id, MovieDto newMovie) {
-        Movie movie = repo.findById(id).orElse(null);
-
-        if(movie == null) {
-            return null;
-        }
+        Movie movie = repo.findById(id).orElseThrow(() -> new MovieNotFoundException(id));
 
         String watchable = movie.watchableID();
         List<String> streamable = movie.streamable();
@@ -115,7 +110,7 @@ public class MovieService {
     }
     public boolean deleteMovie(String id) {
         if(!repo.existsById(id)) {
-            return false;
+            throw new MovieNotFoundException(id);
         }
         repo.deleteById(id);
         return true;

@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.exceptions.IdIsNullException;
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.dtos.WatchableInDto;
@@ -23,50 +24,55 @@ public class WatchableService {
     }
 
     public Watchable getById(String id) {
+
+        if (id == null) {
+            throw new IdIsNullException(this.toString());
+        }
+
         return watchableRepository.findById(id)
                 .orElseThrow(() -> new WatchableNotFoundException(id));
     }
 
     public Watchable create(WatchableInDto in) {
 
+        if (in == null) {
+            throw new IllegalArgumentException(this.toString() + "WatchableInDto is null");
+        }
+
         UtilityFunctions utilityFunctions = new UtilityFunctions();
         String id = utilityFunctions.createId();
 
-        Watchable newWatchable = new Watchable(
-                id,
-                in.title(),
-                in.actors(),
-                in.duration(),
-                in.directors(),
-                in.releaseDate(),
-                in.genres(),
-                in.episode(),
-                in.ageRating());
-
+        Watchable newWatchable = new Watchable(id, in);
         return watchableRepository.save(newWatchable);
     }
 
-    public void deleteById(String id) {
+    public boolean deleteById(String id) {
 
-        boolean exists = watchableRepository.existsById(id);
+        if(id == null){
+            throw new IdIsNullException(this.toString());
+        }
 
-        if (!exists) {
+        if (!watchableRepository.existsById(id)) {
             throw new WatchableNotFoundException(id);
         }
+
         watchableRepository.deleteById(id);
+        return true;
     }
 
     public Watchable update(String id, WatchableInDto in) {
-        boolean exists = watchableRepository.existsById(id);
 
-        if (!exists) {
-            throw new WatchableNotFoundException(id);
+        if (id == null){
+            throw new IdIsNullException(this.toString());
+        }
+
+        if (in == null) {
+            throw new IllegalArgumentException(this.toString() + "WatchableInDto is null");
         }
 
         Watchable existing = watchableRepository.findById(id).orElseThrow(() -> new WatchableNotFoundException(id));
 
         Watchable toSave = existing
-                .withId(id)
                 .withTitle(in.title())
                 .withActors(in.actors())
                 .withDirectors(in.directors())

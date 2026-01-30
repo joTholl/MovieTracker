@@ -39,6 +39,7 @@ public class SeasonService {
     }
 
     public Season createSeason(SeasonInDTO seasonInDTO) {
+
         String id = utilityFunctions.createId();
         List<Watchable> watchables = new ArrayList<>();
         for (WatchableInDto watchableInDto : seasonInDTO.watchableInDtos()) {
@@ -80,6 +81,5 @@ public class SeasonService {
             watchableService.deleteById(watchable.id());
         }
         seasonRepository.deleteById(id);
-
     }
 }

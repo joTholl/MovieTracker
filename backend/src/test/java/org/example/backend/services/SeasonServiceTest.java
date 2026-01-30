@@ -1,8 +1,8 @@
 package org.example.backend.services;
 
-import org.example.backend.dtos.SeasonInDTO;
-import org.example.backend.dtos.SeasonUpdateDTO;
-import org.example.backend.dtos.SeasonWatchableIdDTO;
+import org.example.backend.dtos.SeasonInDto;
+import org.example.backend.dtos.SeasonUpdateDto;
+import org.example.backend.dtos.SeasonWatchableIdDto;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Season;
@@ -35,14 +35,14 @@ class SeasonServiceTest {
     private final Season season1 = new Season("abc", 1, List.of(watchable1), List.of("www.something.com"));
     private final Season season2 = new Season("dfg", 2, List.of(watchable2), List.of("www.anything.com"));
 
-    private final SeasonInDTO seasonInDTO1 = new SeasonInDTO(1, List.of(new WatchableInDto("Inception", List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+    private final SeasonInDto seasonInDto1 = new SeasonInDto(1, List.of(new WatchableInDto("Inception", List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
             "2h 28m", List.of("Christopher Nolan"), LocalDate.of(2010, 7, 16), List.of("Sci-Fi", "Thriller", "Action"),
             0, 12)), List.of("www.something.com"));
 
-    private final SeasonUpdateDTO seasonUpdateDTO = new SeasonUpdateDTO(1, List.of(watchable1), List.of("www.something.com"));
+    private final SeasonUpdateDto seasonUpdateDTO = new SeasonUpdateDto(1, List.of(watchable1), List.of("www.something.com"));
 
-    private final SeasonWatchableIdDTO swid1 = new SeasonWatchableIdDTO("abc", 1, List.of("abdhg12"), List.of("www.something.com"));
-    private final SeasonWatchableIdDTO swid2 = new SeasonWatchableIdDTO("dfg", 2, List.of("sghdjd3254"), List.of("www.anything.com"));
+    private final SeasonWatchableIdDto swid1 = new SeasonWatchableIdDto("abc", 1, List.of("abdhg12"), List.of("www.something.com"));
+    private final SeasonWatchableIdDto swid2 = new SeasonWatchableIdDto("dfg", 2, List.of("sghdjd3254"), List.of("www.anything.com"));
 
     @Test
     void getAllSeasons_shouldReturnAllSeasons() {
@@ -78,7 +78,7 @@ class SeasonServiceTest {
         when(utilityFunctionsMock.createId()).thenReturn("abc");
         when(watchableServiceMock.create(new WatchableInDto(watchable1))).thenReturn(watchable1);
         when(seasonRepositoryMock.save(swid1)).thenReturn(swid1);
-        Season season = seasonService.createSeason(seasonInDTO1);
+        Season season = seasonService.createSeason(seasonInDto1);
         verify(seasonRepositoryMock).save(swid1);
         verify(watchableServiceMock).create(new WatchableInDto(watchable1));
         verify(utilityFunctionsMock).createId();
@@ -89,11 +89,11 @@ class SeasonServiceTest {
     @Test
     void updateSeason_shouldUpdateSeason() {
         Season season3 = season1.withSeasonNumber(2).withWatchables(new ArrayList<>());
-        SeasonWatchableIdDTO swid3 = swid1.withSeasonNumber(2).withWatchablesId(new ArrayList<>());
-        SeasonUpdateDTO seasonUpdateDTO1 = seasonUpdateDTO.withSeasonNumber(2).withWatchables(new ArrayList<>());
+        SeasonWatchableIdDto swid3 = swid1.withSeasonNumber(2).withWatchablesId(new ArrayList<>());
+        SeasonUpdateDto seasonUpdateDto1 = seasonUpdateDTO.withSeasonNumber(2).withWatchables(new ArrayList<>());
         when(seasonRepositoryMock.save(swid3)).thenReturn(swid3);
         when(seasonRepositoryMock.findById("abc")).thenReturn(Optional.of(swid1));
-        Season season = seasonService.updateSeason(season3.id(), seasonUpdateDTO1);
+        Season season = seasonService.updateSeason(season3.id(), seasonUpdateDto1);
         verify(seasonRepositoryMock).findById("abc");
         verify(seasonRepositoryMock).save(swid3);
         assertEquals(season, season3.withWatchables(new ArrayList<>()));
@@ -103,11 +103,11 @@ class SeasonServiceTest {
     void updateSeason_shouldUpdateWatchable() {
         Watchable watchable3 = watchable1.withEpisode(2);
         Season season3 = season1.withWatchables(List.of(watchable3));
-        SeasonUpdateDTO seasonUpdateDTO1 = seasonUpdateDTO.withWatchables(List.of(watchable3));
+        SeasonUpdateDto seasonUpdateDto1 = seasonUpdateDTO.withWatchables(List.of(watchable3));
         when(seasonRepositoryMock.save(swid1)).thenReturn(swid1);
         when(seasonRepositoryMock.findById("abc")).thenReturn(Optional.of(swid1));
         when(watchableServiceMock.update(watchable3.id(),new WatchableInDto(watchable3))).thenReturn(watchable3);
-        Season season = seasonService.updateSeason(season3.id(), seasonUpdateDTO1);
+        Season season = seasonService.updateSeason(season3.id(), seasonUpdateDto1);
         verify(seasonRepositoryMock).findById("abc");
         verify(seasonRepositoryMock).save(swid1);
         verify(watchableServiceMock).update(watchable3.id(),new WatchableInDto(watchable3));
@@ -118,13 +118,13 @@ class SeasonServiceTest {
     void updateSeason_shouldCreateWatchable() {
         when(utilityFunctionsMock.createId()).thenReturn("abcd");
         Watchable watchable3 = watchable1.withId("abcd");
-        SeasonUpdateDTO seasonUpdateDTO1 = seasonUpdateDTO.withWatchables(List.of(watchable1,watchable3));
-        SeasonWatchableIdDTO swid3 = swid1.withWatchablesId(List.of(watchable1.id(),"abcd"));
+        SeasonUpdateDto seasonUpdateDto1 = seasonUpdateDTO.withWatchables(List.of(watchable1,watchable3));
+        SeasonWatchableIdDto swid3 = swid1.withWatchablesId(List.of(watchable1.id(),"abcd"));
         when(seasonRepositoryMock.save(swid3)).thenReturn(swid3);
         when(seasonRepositoryMock.findById("abc")).thenReturn(Optional.of(swid1));
         when(watchableServiceMock.create(new WatchableInDto(watchable3))).thenReturn(watchable3);
         when(watchableServiceMock.update(watchable1.id(),new WatchableInDto(watchable1))).thenReturn(watchable1);
-        Season season = seasonService.updateSeason(season1.id(), seasonUpdateDTO1);
+        Season season = seasonService.updateSeason(season1.id(), seasonUpdateDto1);
         verify(seasonRepositoryMock).findById("abc");
         verify(seasonRepositoryMock).save(swid3);
         verify(watchableServiceMock).create(new WatchableInDto(watchable3));
@@ -134,11 +134,11 @@ class SeasonServiceTest {
 
     @Test
     void updateSeason_shouldDeleteWatchable() {
-        SeasonUpdateDTO seasonUpdateDTO1 = seasonUpdateDTO.withWatchables(new ArrayList<>());
-        SeasonWatchableIdDTO swid3 = swid1.withWatchablesId(new ArrayList<>());
+        SeasonUpdateDto seasonUpdateDto1 = seasonUpdateDTO.withWatchables(new ArrayList<>());
+        SeasonWatchableIdDto swid3 = swid1.withWatchablesId(new ArrayList<>());
         when(seasonRepositoryMock.save(swid3)).thenReturn(swid3);
         when(seasonRepositoryMock.findById("abc")).thenReturn(Optional.of(swid1));
-        Season season = seasonService.updateSeason(season1.id(), seasonUpdateDTO1);
+        Season season = seasonService.updateSeason(season1.id(), seasonUpdateDto1);
         verify(seasonRepositoryMock).findById("abc");
         verify(seasonRepositoryMock).save(swid3);
         verify(watchableServiceMock).deleteById(watchable1.id());

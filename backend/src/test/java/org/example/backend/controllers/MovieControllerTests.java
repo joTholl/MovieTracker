@@ -1,8 +1,7 @@
 package org.example.backend.controllers;
 
 import org.example.backend.models.Movie;
-import org.example.backend.models.MovieDto;
-import org.example.backend.repositorys.MovieRepo;
+import org.example.backend.repositories.MovieRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -24,7 +22,7 @@ public class MovieControllerTests {
     private MockMvc mockMvc;
 
     @Autowired
-    private MovieRepo repo;
+    private MovieRepository repo;
 
     @BeforeEach
     void cleanDb() {

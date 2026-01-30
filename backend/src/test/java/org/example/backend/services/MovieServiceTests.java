@@ -1,8 +1,8 @@
 package org.example.backend.services;
 
 import org.example.backend.models.Movie;
-import org.example.backend.models.MovieDto;
-import org.example.backend.repositorys.MovieRepo;
+import org.example.backend.dtos.MovieDto;
+import org.example.backend.repositories.MovieRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 public class MovieServiceTests {
 
-    private final MovieRepo mockRepo = mock(MovieRepo.class);
+    private final MovieRepository mockRepo = mock(MovieRepository.class);
     private final MovieService service = new MovieService(mockRepo);
 
     @Test

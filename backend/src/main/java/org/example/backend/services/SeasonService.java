@@ -1,9 +1,9 @@
 package org.example.backend.services;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.dtos.SeasonInDTO;
-import org.example.backend.dtos.SeasonUpdateDTO;
-import org.example.backend.dtos.SeasonWatchableIdDTO;
+import org.example.backend.dtos.SeasonInDto;
+import org.example.backend.dtos.SeasonUpdateDto;
+import org.example.backend.dtos.SeasonWatchableIdDto;
 import org.example.backend.exceptions.ArgumentMismatchException;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.dtos.WatchableInDto;
@@ -25,20 +25,20 @@ public class SeasonService {
     private final UtilityFunctions utilityFunctions;
 
     public List<Season> getAllSeasons() {
-        List<SeasonWatchableIdDTO> seasonWatchableIdDTOs = seasonRepository.findAll();
+        List<SeasonWatchableIdDto> seasonWatchableIdDtos = seasonRepository.findAll();
         List<Season> seasons = new ArrayList<>();
-        for (SeasonWatchableIdDTO swid : seasonWatchableIdDTOs) {
+        for (SeasonWatchableIdDto swid : seasonWatchableIdDtos) {
             seasons.add(new Season(swid, watchableService));
         }
         return seasons;
     }
 
     public Season getSeasonById(String id) throws NoSuchElementException {
-        SeasonWatchableIdDTO swid = seasonRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Id not found"));
+        SeasonWatchableIdDto swid = seasonRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Id not found"));
         return new Season(swid, watchableService);
     }
 
-    public Season createSeason(SeasonInDTO seasonInDTO) {
+    public Season createSeason(SeasonInDto seasonInDTO) {
 
         String id = utilityFunctions.createId();
         List<Watchable> watchables = new ArrayList<>();
@@ -47,13 +47,13 @@ public class SeasonService {
             watchables.add(w);
         }
         Season season = new Season(id, seasonInDTO.seasonNumber(), watchables, seasonInDTO.streamables());
-        seasonRepository.save(new SeasonWatchableIdDTO(season));
+        seasonRepository.save(new SeasonWatchableIdDto(season));
         return season;
     }
 
 
-    public Season updateSeason(String id, SeasonUpdateDTO seasonUpdateDTO) throws NoSuchElementException, ArgumentMismatchException {
-        SeasonWatchableIdDTO swid = seasonRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Id not found"));
+    public Season updateSeason(String id, SeasonUpdateDto seasonUpdateDTO) throws NoSuchElementException, ArgumentMismatchException {
+        SeasonWatchableIdDto swid = seasonRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Id not found"));
         List<Watchable> watchables = new ArrayList<>();
         List<String> watchableIds = new ArrayList<>();
         for (Watchable watchable : seasonUpdateDTO.watchables()) {
@@ -69,7 +69,7 @@ public class SeasonService {
                 watchableService.deleteById(watchableId);
             }
         }
-        seasonRepository.save(new SeasonWatchableIdDTO(id,seasonUpdateDTO.seasonNumber(), watchableIds,seasonUpdateDTO.streamables()));
+        seasonRepository.save(new SeasonWatchableIdDto(id,seasonUpdateDTO.seasonNumber(), watchableIds,seasonUpdateDTO.streamables()));
         return new Season(id, seasonUpdateDTO.seasonNumber(), watchables, seasonUpdateDTO.streamables());
     }
 

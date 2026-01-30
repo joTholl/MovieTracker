@@ -1,4 +1,4 @@
-package org.example.backend.models;
+package org.example.backend.dtos;
 
 import java.util.List;
 

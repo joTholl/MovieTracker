@@ -149,7 +149,7 @@ public class MovieControllerTests {
     void getMovieById_ShouldReturn404IfMovieNotFound() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/movie/1"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(content().string("Movie mit ID 1 nicht gefunden"));
     }
 
     @Test
@@ -234,7 +234,7 @@ public class MovieControllerTests {
                                 }
                                 """))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(content().string("Movie mit ID 1 nicht gefunden"));
     }
 
     @Test
@@ -252,7 +252,7 @@ public class MovieControllerTests {
     void deleteMovie_ShouldReturn404IfMovieNotFound() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/movie/1"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(content().string("Movie mit ID 1 nicht gefunden"));
     }
 
 

@@ -59,10 +59,12 @@ public class SeasonService {
         for (Watchable watchable : seasonUpdateDTO.watchables()) {
             if (swid.watchablesId().contains(watchable.id())) {
                 watchables.add(watchableService.update(watchable.id(), new WatchableInDto(watchable)));
+                watchableIds.add(watchable.id());
             } else {
                 watchables.add(watchableService.create(new WatchableInDto(watchable)));
+                watchableIds.add(watchables.getLast().id());
             }
-            watchableIds.add(watchable.id());
+
         }
         for (String watchableId : swid.watchablesId()) {
             if (!watchableIds.contains(watchableId)) {

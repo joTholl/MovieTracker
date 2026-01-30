@@ -1,7 +1,5 @@
 package org.example.backend.exceptions;
 
-import org.springframework.data.crossstore.ChangeSetPersister;
-
 import java.util.NoSuchElementException;
 
 public class WatchableNotFoundException extends NoSuchElementException {

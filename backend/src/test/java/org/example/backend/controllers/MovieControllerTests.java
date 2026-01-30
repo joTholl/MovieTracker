@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class MovieControllerTests {
@@ -53,7 +55,7 @@ public class MovieControllerTests {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/movie"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(
+                .andExpect(content().json(
                         """
                           [
                           {
@@ -108,7 +110,7 @@ public class MovieControllerTests {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/movie/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(
+                .andExpect(content().json(
                         """
                               {
                                "id": "1",
@@ -144,6 +146,13 @@ public class MovieControllerTests {
     }
 
     @Test
+    void getMovieById_ShouldReturn404IfMovieNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/movie/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(content().string(""));
+    }
+
+    @Test
     void createMovie_ShouldReturnCreatedMovie() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/movie")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -159,7 +168,7 @@ public class MovieControllerTests {
                         }
                         """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(
+                .andExpect(content().json(
                          """
                          {
                             "watchableID": "4",
@@ -193,7 +202,7 @@ public class MovieControllerTests {
                                 }
                                 """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(
+                .andExpect(content().json(
                         """
                         {
                             "id": "4",
@@ -210,6 +219,25 @@ public class MovieControllerTests {
     }
 
     @Test
+    void changeMovie_ShouldReturn404IfMovieNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/movie/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                                {
+                                    "watchableID": "4",
+                                    "streamable": [
+                                        "Amazon",
+                                        "Prime",
+                                        "Disney+",
+                                        "Test123"
+                                    ]
+                                }
+                                """))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(content().string(""));
+    }
+
+    @Test
     void deleteMovie_ShouldReturnTrueIfSuccessfull() throws Exception {
         List<String> streamable = List.of("Amazon", "Prime");
         Movie movie = new Movie("4", "4", streamable);
@@ -217,7 +245,14 @@ public class MovieControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/movie/4"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("true"));
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    void deleteMovie_ShouldReturn404IfMovieNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/movie/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(content().string(""));
     }
 
 

@@ -2,7 +2,7 @@ package org.example.backend.services;
 
 import org.example.backend.exceptions.MovieNotFoundException;
 import org.example.backend.models.Movie;
-import org.example.backend.DTOs.MovieDto;
+import org.example.backend.DTOs.MovieInDto;
 import org.example.backend.repositories.MovieRepository;
 import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThatException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -55,7 +54,7 @@ public class MovieServiceTests {
     void createMovie_ShouldReturnNewMovie() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
-        MovieDto movie = new MovieDto("8", streamable);
+        MovieInDto movie = new MovieInDto("8", streamable);
         when(mockRepo.save(any(Movie.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         //WHEN
@@ -102,7 +101,7 @@ public class MovieServiceTests {
     void changeMovie_ShouldUpdateMovie() {
         List<String> streamable = List.of("Amazon", "Prime");
         Movie movie = new Movie("1", "8", streamable);
-        MovieDto newMovie = new MovieDto("9", streamable);
+        MovieInDto newMovie = new MovieInDto("9", streamable);
         when(mockRepo.findById("1")).thenReturn(Optional.of(movie));
         when(mockRepo.save(any(Movie.class))).thenAnswer(invocation -> invocation.getArgument(0));
         //WHEN
@@ -121,7 +120,7 @@ public class MovieServiceTests {
     void changeMovie_ShouldThrowExceptionIfNoIdFound() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
-        MovieDto movie = new MovieDto("1", streamable);
+        MovieInDto movie = new MovieInDto("1", streamable);
         String emptyID = "";
 
         //THEN

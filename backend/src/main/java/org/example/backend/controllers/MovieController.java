@@ -2,7 +2,7 @@ package org.example.backend.controllers;
 
 import org.example.backend.DTOs.MovieOutDto;
 import org.example.backend.models.Movie;
-import org.example.backend.DTOs.MovieDto;
+import org.example.backend.DTOs.MovieInDto;
 import org.example.backend.services.MovieService;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,12 +63,12 @@ public class MovieController {
      **/
 
     @PostMapping
-    public Movie createMovie(@RequestBody MovieDto movie) {
+    public Movie createMovie(@RequestBody MovieInDto movie) {
         return service.createMovie(movie);
     }
 
     @PutMapping("/{id}")
-    public Movie changeMovie(@PathVariable String id, @RequestBody MovieDto movie) {
+    public Movie changeMovie(@PathVariable String id, @RequestBody MovieInDto movie) {
         return service.changeMovie(id, movie);
     }
 

@@ -1,11 +1,10 @@
 package org.example.backend.controllers;
 
 import org.example.backend.models.Movie;
-import org.example.backend.models.MovieDto;
+import org.example.backend.dtos.MovieDto;
 import org.example.backend.services.MovieService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController

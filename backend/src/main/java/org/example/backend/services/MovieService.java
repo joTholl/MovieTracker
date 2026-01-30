@@ -1,8 +1,8 @@
 package org.example.backend.services;
 
 import org.example.backend.models.Movie;
-import org.example.backend.models.MovieDto;
-import org.example.backend.repositorys.MovieRepo;
+import org.example.backend.dtos.MovieDto;
+import org.example.backend.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -11,9 +11,9 @@ import java.util.UUID;
 
 @Service
 public class MovieService {
-    private final MovieRepo repo;
+    private final MovieRepository repo;
 
-    public MovieService(MovieRepo repo) {
+    public MovieService(MovieRepository repo) {
         this.repo = repo;
     }
 

@@ -1,6 +1,6 @@
 package org.example.backend.controllers;
 
-import org.example.backend.dtos.SeasonWatchableIdDTO;
+import org.example.backend.dtos.SeasonWatchableIdDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.example.backend.repositories.SeasonRepository;
@@ -37,8 +37,8 @@ class SeasonControllerTest {
             "2h 34m", List.of("Christopher Nolan"), LocalDate.of(2016, 7, 16), List.of("Sci-Fi", "Thriller", "Action"),
             0, 12);
 
-    private final SeasonWatchableIdDTO swid1 = new SeasonWatchableIdDTO("abc", 1, List.of("abdhg12"), List.of("www.something.com"));
-    private final SeasonWatchableIdDTO swid2 = new SeasonWatchableIdDTO("dfg", 2, List.of("sghdjd3254"), List.of("www.anything.com"));
+    private final SeasonWatchableIdDto swid1 = new SeasonWatchableIdDto("abc", 1, List.of("abdhg12"), List.of("www.something.com"));
+    private final SeasonWatchableIdDto swid2 = new SeasonWatchableIdDto("dfg", 2, List.of("sghdjd3254"), List.of("www.anything.com"));
 
     private final String seasonJson1 = """
             {

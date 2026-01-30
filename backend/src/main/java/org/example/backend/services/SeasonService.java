@@ -38,22 +38,28 @@ public class SeasonService {
     }
 
     public Season createSeason(SeasonInDTO seasonInDTO) {
+
         String id = utilityFunctions.createId();
-        Season season = new Season(id,seasonInDTO);
-        for (Watchable watchable : season.watchables()) {
-            watchableService.create(new WatchableInDto(watchable));
+
+        List<String> watchableIds = new ArrayList<>();
+        for (Watchable watchable : seasonInDTO.watchables()) {
+           Watchable w =  watchableService.create(new WatchableInDto(watchable));
+           watchableIds.add(w.id());
         }
-        SeasonWatchableIdDTO swid = seasonRepository.save(new SeasonWatchableIdDTO(season));
-        return getSeasonById(swid.id());
+
+        seasonRepository.save(new SeasonWatchableIdDTO(id, seasonInDTO.seasonNumber(), watchableIds, seasonInDTO.streamables()));
+        return getSeasonById(id);
     }
 
     public Season updateSeason(String id, SeasonInDTO seasonInDTO) throws NoSuchElementException, ArgumentMismatchException {
         if (seasonRepository.findById(id).isEmpty()) {
             throw new NoSuchElementException("Id not found");
         }
+
         for (Watchable watchable : seasonInDTO.watchables()) {
             watchableService.update(watchable.id(), new WatchableInDto(watchable));
         }
+
         Season season = new Season(id, seasonInDTO);
         SeasonWatchableIdDTO swid = seasonRepository.save(new SeasonWatchableIdDTO(season));
         return getSeasonById(swid.id());
@@ -67,6 +73,5 @@ public class SeasonService {
             watchableService.deleteById(watchable.id());
         }
         seasonRepository.deleteById(id);
-
     }
 }

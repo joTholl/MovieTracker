@@ -37,8 +37,6 @@ public class MovieService {
         if(id == null || id.isEmpty()) return null;
 
         return repo.findById(id).orElse(null);
-
-
     }
 
     /** Auskommentiert weil WatchableRepo noch fehlt

@@ -43,7 +43,6 @@ public class WatchableService {
         String id = utilityFunctions.createId();
 
         Watchable newWatchable = new Watchable(id, in);
-
         return watchableRepository.save(newWatchable);
     }
 

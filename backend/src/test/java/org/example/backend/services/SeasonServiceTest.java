@@ -1,6 +1,7 @@
 package org.example.backend.services;
 
 import org.example.backend.dtos.SeasonInDTO;
+import org.example.backend.dtos.SeasonUpdateDTO;
 import org.example.backend.dtos.SeasonWatchableIdDTO;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.dtos.WatchableInDto;
@@ -33,7 +34,11 @@ class SeasonServiceTest {
     private final Season season1 = new Season("abc", 1, List.of(watchable1), List.of("www.something.com"));
     private final Season season2 = new Season("dfg", 2, List.of(watchable2), List.of("www.anything.com"));
 
-    private final SeasonInDTO seasonInDTO1 = new SeasonInDTO(1, List.of(watchable1), List.of("www.something.com"));
+    private final SeasonInDTO seasonInDTO1 = new SeasonInDTO(1, List.of( new WatchableInDto("Inception", List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+            "2h 28m", List.of("Christopher Nolan"), LocalDate.of(2010, 7, 16), List.of("Sci-Fi", "Thriller", "Action"),
+            0, 12)), List.of("www.something.com"));
+
+    private final SeasonUpdateDTO seasonUpdateDTO = new SeasonUpdateDTO(1, List.of(watchable1), List.of("www.something.com"));
 
     private final SeasonWatchableIdDTO swid1 = new SeasonWatchableIdDTO("abc", 1, List.of("abdhg12"), List.of("www.something.com"));
     private final SeasonWatchableIdDTO swid2 = new SeasonWatchableIdDTO("dfg", 2, List.of("sghdjd3254"), List.of("www.anything.com"));
@@ -90,7 +95,7 @@ class SeasonServiceTest {
         when(seasonRepositoryMock.save(swid3)).thenReturn(swid3);
         when(seasonRepositoryMock.findById("abc")).thenReturn(Optional.of(swid3));
         when(watchableServiceMock.getById("abdhg12")).thenReturn(watchable1);
-        Season season = seasonService.updateSeason(season3.id(), seasonInDTO1.withSeasonNumber(2));
+        Season season = seasonService.updateSeason(season3.id(), seasonUpdateDTO.withSeasonNumber(2));
         verify(seasonRepositoryMock).save(swid3);
         verify(seasonRepositoryMock,times(2)).findById("abc");
         verify(watchableServiceMock).getById("abdhg12");
@@ -100,7 +105,7 @@ class SeasonServiceTest {
     @Test
     void updateSeason_shouldThrowException_whenCalledWithFalseId() {
         when(seasonRepositoryMock.findById("sdh")).thenReturn(Optional.empty());
-        assertThrows(NoSuchElementException.class, () -> seasonService.updateSeason("sdh", seasonInDTO1));
+        assertThrows(NoSuchElementException.class, () -> seasonService.updateSeason("sdh", seasonUpdateDTO));
         verify(seasonRepositoryMock).findById("sdh");
     }
 

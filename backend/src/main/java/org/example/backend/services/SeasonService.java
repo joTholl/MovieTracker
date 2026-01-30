@@ -2,6 +2,7 @@ package org.example.backend.services;
 
 import lombok.AllArgsConstructor;
 import org.example.backend.dtos.SeasonInDTO;
+import org.example.backend.dtos.SeasonUpdateDTO;
 import org.example.backend.dtos.SeasonWatchableIdDTO;
 import org.example.backend.exceptions.ArgumentMismatchException;
 import org.example.backend.helpers.UtilityFunctions;
@@ -39,22 +40,26 @@ public class SeasonService {
 
     public Season createSeason(SeasonInDTO seasonInDTO) {
         String id = utilityFunctions.createId();
-        Season season = new Season(id,seasonInDTO);
-        for (Watchable watchable : season.watchables()) {
-            watchableService.create(new WatchableInDto(watchable));
+        List<Watchable> watchables = new ArrayList<>();
+        for (WatchableInDto watchableInDto : seasonInDTO.watchableInDtos()) {
+            Watchable w = watchableService.create(watchableInDto);
+            watchables.add(w);
         }
+        Season season = new Season(id, seasonInDTO.seasonNumber(), watchables, seasonInDTO.streamables());
         SeasonWatchableIdDTO swid = seasonRepository.save(new SeasonWatchableIdDTO(season));
         return getSeasonById(swid.id());
     }
 
-    public Season updateSeason(String id, SeasonInDTO seasonInDTO) throws NoSuchElementException, ArgumentMismatchException {
+
+    public Season updateSeason(String id, SeasonUpdateDTO seasonUpdateDTO) throws NoSuchElementException, ArgumentMismatchException {
+        //Watchables löschen oder hinzufügen
         if (seasonRepository.findById(id).isEmpty()) {
             throw new NoSuchElementException("Id not found");
         }
-        for (Watchable watchable : seasonInDTO.watchables()) {
+        for (Watchable watchable : seasonUpdateDTO.watchables()) {
             watchableService.update(watchable.id(), new WatchableInDto(watchable));
         }
-        Season season = new Season(id, seasonInDTO);
+        Season season = new Season(id, seasonUpdateDTO);
         SeasonWatchableIdDTO swid = seasonRepository.save(new SeasonWatchableIdDTO(season));
         return getSeasonById(swid.id());
     }

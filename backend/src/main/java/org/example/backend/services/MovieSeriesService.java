@@ -23,6 +23,20 @@ public class MovieSeriesService {
         this.movieService = movieService;
     }
 
+    private List<Movie> GetMoviesById(List<String> movieIds) {
+
+        if (movieIds == null || movieIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<Movie> outMovies = new ArrayList<>();
+        for (String movieId : movieIds) {
+            outMovies.add(movieService.getMovieById(movieId));
+        }
+
+        return outMovies;
+    }
+
     public List<MovieSeries> findAll() {
         return movieSeriesRepository.findAll();
     }
@@ -48,20 +62,6 @@ public class MovieSeriesService {
         return new MovieSeriesOutDto(movieSeries.id(), movieSeries.title(), outMovies);
     }
 
-    private List<Movie> GetMoviesById(List<String> movieIds) {
-
-        if (movieIds == null || movieIds.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<Movie> outMovies = new ArrayList<>();
-        for (String movieId : movieIds) {
-            outMovies.add(movieService.getMovieById(movieId));
-        }
-
-        return outMovies;
-    }
-
     public MovieSeriesOutDto create(MovieSeriesInDto inDto) {
 
         if (inDto == null) {
@@ -85,8 +85,6 @@ public class MovieSeriesService {
 
         MovieSeries toUpdate = movieSeriesRepository.findById(id).
                 orElseThrow(() -> new NoSuchElementException("Movie Series with id " + id + " does not exist"));
-
-
 
         MovieSeries updated = toUpdate
                 .withTitle(updateDto.title())

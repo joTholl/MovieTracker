@@ -1,6 +1,5 @@
 package org.example.backend.services;
 
-
 import org.example.backend.dtos.*;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.models.Movie;
@@ -49,6 +48,20 @@ public class MovieSeriesService {
         return new MovieSeriesOutDto(movieSeries.id(), movieSeries.title(), outMovies);
     }
 
+    private List<Movie> GetMoviesById(List<String> movieIds) {
+
+        if (movieIds == null || movieIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<Movie> outMovies = new ArrayList<>();
+        for (String movieId : movieIds) {
+            outMovies.add(movieService.getMovieById(movieId));
+        }
+
+        return outMovies;
+    }
+
     public MovieSeriesOutDto create(MovieSeriesInDto inDto) {
 
         if (inDto == null) {
@@ -58,51 +71,31 @@ public class MovieSeriesService {
         UtilityFunctions utilityFunctions = new UtilityFunctions();
         String id = utilityFunctions.createId();
 
-//        List<String> movieIds = new ArrayList<>();
-//        List<Movie> outMovies = new ArrayList<>();
-//        if (!inDto.inMovies().isEmpty()) {
-//
-//            for (MovieInDto inMovie : inDto.inMovies()){
-//               Movie m = movieService.createMovie(inMovie);
-//               movieIds.add(m.id());
-//               outMovies.add(m);
-//            }
-//        }
+        List<Movie> outMovies = GetMoviesById(inDto.movieIds());
 
-        movieSeriesRepository.save(new MovieSeries(id, inDto.title(), movieIds));
+        movieSeriesRepository.save(new MovieSeries(id, inDto.title(), inDto.movieIds()));
         return new MovieSeriesOutDto(id, inDto.title(), outMovies);
     }
-//
-//    public MovieSeriesOutDto update(String id, MovieSeriesUpdateDto updateDto) {
-//
-//        if (updateDto == null) {
-//            return null;
-//        }
-//
-//        MovieSeries toUpdate = movieSeriesRepository.findById(id).
-//                orElseThrow(() -> new NoSuchElementException("Movie Series with id " + id + " does not exist"));
-//
-//        List<Movie> updateMovies = updateDto.movies();
-//        List<String> updateIds = new ArrayList<>();
-//        List<Movie> outMovies = new ArrayList<>();
-//
-//        for (Movie updateMovie : updateMovies) {
-//            if (toUpdate.movieIds().contains(updateMovie.id())) {
-//                movieService.changeMovie(updateMovie.id(), updateMovie);
-//                outMovies.add(updateMovie);
-//            } else {
-//                outMovies.add(movieService.createMovie(updateMovie));
-//                updateIds.add(outMovies.getLast().id());
-//            }
-//        }
-//
-//        MovieSeries updated = toUpdate
-//                .withTitle(updateDto.title())
-//                .withMovieIds(updateIds);
-//
-//        movieSeriesRepository.save(updated);
-//        return new MovieSeriesOutDto(updated.id(), updated.title(), updateMovies);
-//    }
+
+    public MovieSeriesOutDto update(String id, MovieSeriesUpdateDto updateDto) {
+
+        if (updateDto == null) {
+            return null;
+        }
+
+        MovieSeries toUpdate = movieSeriesRepository.findById(id).
+                orElseThrow(() -> new NoSuchElementException("Movie Series with id " + id + " does not exist"));
+
+
+        MovieSeries updated = toUpdate
+                .withTitle(updateDto.title())
+                .withMovieIds(updateDto.movieIds());
+
+       List<Movie> outMovies = GetMoviesById(updateDto.movieIds());
+
+        movieSeriesRepository.save(updated);
+        return new MovieSeriesOutDto(updated.id(), updated.title(), outMovies);
+    }
 
     public boolean deleteById(String id){
 

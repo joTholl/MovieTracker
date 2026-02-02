@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
+import static com.mongodb.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,7 +61,8 @@ class WatchableControllerTest {
 
         watchableRepository.save(w1);
 
-        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(        """
+        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(
+                                """
                                 [
                                   {
                                     "id": "1",
@@ -128,7 +133,6 @@ class WatchableControllerTest {
         // when + then
         mockMvc.perform(post("/api/watchables")
                         .contentType(MediaType.APPLICATION_JSON)
-                        //.content(jsonMatch.toString()))
                         .content("""
                                     {
                                       "title": "Interstellar",
@@ -148,14 +152,85 @@ class WatchableControllerTest {
     }
 
     @Test
-    void deleteById_whenMissing_returns404() throws Exception {
-//        // given
-//
-//        WatchableService service = new WatchableService(watchableRepo);
-//        ResponseEntity response = ResponseEntity.noContent().build();
-//
-//        // when + then
-//        mockMvc.perform(delete("/api/watchables/1"))
-//                .andExpect(status().isNoContent());
+    void deleteById() throws Exception {
+        // when + then
+
+        Watchable w1 = new Watchable(
+                "1",
+                "Interstellar",
+                List.of("Matthew McConaughey", "Anne Hathaway"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                fakeDate,
+                List.of("SciFi", "Drama"),
+                0,
+                12
+        );
+
+        watchableRepository.save(w1);
+        mockMvc.perform(delete("/api/watchables/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteById_whenMissing_returnsWatchableNotFoundException() throws Exception {
+
+        // when
+        MvcResult result = mockMvc.perform(delete("/api/watchables/1"))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        Exception ex = result.getResolvedException();
+        assertNotNull(ex);
+        assertInstanceOf(WatchableNotFoundException.class, ex);
+
+        assertTrue(ex.getMessage().contains("1"));
+    }
+
+    @Test
+    void update() throws Exception {
+
+        Watchable w1 = new Watchable(
+                "1",
+                "Interstellar",
+                List.of("Matthew McConaughey", "Anne Hathaway"),
+                "02:49",
+                List.of("Christopher Nolan"),
+                fakeDate,
+                List.of("SciFi", "Drama"),
+                0,
+                12
+        );
+
+        watchableRepository.save(w1);
+
+        MvcResult result = mockMvc.perform(put("/api/watchables/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                          "title": "Interstellar",
+                          "actors": ["Matthew McConaughey", "Anne Hathaway"],
+                          "duration": "02:49",
+                          "directors": ["Christopher Nolan"],
+                          "releaseDate": "%s",
+                          "genres": ["SciFi", "Drama"],
+                          "episode": 0,
+                          "ageRating": 12
+                        }
+                        """.formatted(fakeDate)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Interstellar"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.duration").value("02:49"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.releaseDate").value(fakeDate.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.episode").value(0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ageRating").value(12))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.actors", org.hamcrest.Matchers.contains("Matthew McConaughey", "Anne Hathaway")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.directors", org.hamcrest.Matchers.contains("Christopher Nolan")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genres", org.hamcrest.Matchers.contains("SciFi", "Drama")))
+                .andReturn();
+
+        Exception ex = result.getResolvedException();
+        assertNull(ex);
     }
 }

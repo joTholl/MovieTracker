@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.exceptions.IdIsNullException;
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
@@ -59,6 +60,13 @@ class WatchableServiceTest {
     }
 
     @Test
+    void getById_throwsIdIsNullException_whenIdIsNull() {
+        RuntimeException ex = assertThrows(IdIsNullException.class, () -> watchableService.getById(null));
+
+        assertNotNull(ex);
+    }
+
+    @Test
     void getById_whenFound_returnsWatchable() {
         // given
         Watchable expected = new Watchable(
@@ -83,6 +91,13 @@ class WatchableServiceTest {
         assertEquals(expected, result);
         verify(watchableRepository, times(1)).findById("1");
         verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
+    void create_throwsIllegalArgumentException_whenInDtoIsNull() {
+        RuntimeException ex = assertThrows(IllegalArgumentException.class, () -> watchableService.create(null));
+
+        assertNotNull(ex);
     }
 
     @Test
@@ -118,8 +133,17 @@ class WatchableServiceTest {
 
         // then
         assertNotNull(result);
-        assertEquals(result.directors(), result.directors());
+        assertEquals(result.directors(), saved.directors());
         verify(watchableRepository, times(1)).save(any());
+        verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
+    void deleteById_whenIdIsNull_throwsIdIsNullException() {
+
+        // when - then
+        assertThrows(IdIsNullException.class, () -> watchableService.deleteById(null));
+        verify(watchableRepository, never()).deleteById(anyString());
         verifyNoMoreInteractions(watchableRepository);
     }
 
@@ -147,6 +171,20 @@ class WatchableServiceTest {
         verify(watchableRepository, times(1)).existsById("1");
         verify(watchableRepository, never()).deleteById(anyString());
         verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
+    void update_throwsIdIsNullException_whenIdIsNull() {
+        RuntimeException ex = assertThrows(IdIsNullException.class, () -> watchableService.update(null, null));
+
+        assertNotNull(ex);
+    }
+
+    @Test
+    void update_throwsIllegalArgumentException_whenInDtoIsNull() {
+        RuntimeException ex = assertThrows(IllegalArgumentException.class, () -> watchableService.update(null, null));
+
+        assertNotNull(ex);
     }
 
     @Test
@@ -188,7 +226,6 @@ class WatchableServiceTest {
         assertEquals(pathId, expected.id());
         assertEquals(toUpdate.title(), expected.title());
 
-        verify(watchableRepository, times(1)).existsById(pathId);
         verify(watchableRepository, times(1)).findById(pathId);
         verify(watchableRepository, times(1)).save(existing);
         verifyNoMoreInteractions(watchableRepository);

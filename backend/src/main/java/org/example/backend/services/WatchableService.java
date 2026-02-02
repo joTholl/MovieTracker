@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.dtos.FilterDto;
 import org.example.backend.exceptions.IdIsNullException;
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.helpers.UtilityFunctions;
@@ -8,7 +9,8 @@ import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,18 +26,28 @@ public class WatchableService {
         return watchableRepository.findAll();
     }
 
-    public List<Watchable> getAllByTitle(String title) {
+    public Watchable getById(String id) {
+
+        if (id == null) {
+            throw new IdIsNullException(this.toString());
+        }
+
+        return watchableRepository.findById(id)
+                .orElseThrow(() -> new WatchableNotFoundException(id));
+    }
+
+    public List<Watchable> getAllByTitle(List<Watchable> watchables, String title) {
 
         String normalizedTitle = title.trim().toLowerCase();
-        return watchableRepository.findAll()
+        return watchables
                 .stream().filter(watchable -> watchable.title().trim().toLowerCase().contains(normalizedTitle)).toList();
     }
 
-    public List<Watchable> getAllByActor(String actorName) {
+    public List<Watchable> getAllByActor(List<Watchable> watchables, String actorName) {
 
         String actorNameNormalized = actorName.trim().toLowerCase();
 
-        return watchableRepository.findAll()
+        return watchables
                 .stream()
                 .filter(watchable -> watchable.actors()
                         .stream()
@@ -43,11 +55,11 @@ public class WatchableService {
                 .toList();
     }
 
-    public List<Watchable> getAllByDirector(String directorName) {
+    public List<Watchable> getAllByDirector(List<Watchable> watchables, String directorName) {
 
         String directorNameNormalized = directorName.trim().toLowerCase();
 
-        return watchableRepository.findAll()
+        return watchables
                 .stream()
                 .filter(watchable -> watchable.directors()
                         .stream()
@@ -55,10 +67,10 @@ public class WatchableService {
                 .toList();
     }
 
-    public List<Watchable> getAllByGenre(String inGenre) {
+    public List<Watchable> getAllByGenre(List<Watchable> watchables, String inGenre) {
         String genreNameNormalized = inGenre.trim().toLowerCase();
 
-        return watchableRepository.findAll()
+        return watchables
                 .stream()
                 .filter(watchable -> watchable.genres()
                         .stream()
@@ -71,14 +83,35 @@ public class WatchableService {
                 .stream().filter(watchable -> watchable.releaseDate().getYear() == year).toList();
     }
 
-    public Watchable getById(String id) {
+    public List<Watchable> getAllBySingleFilter(List<Watchable> watchables, FilterDto filterDto) {
 
-        if (id == null) {
-            throw new IdIsNullException(this.toString());
+        if (filterDto == null) {
+            throw new InvalidParameterException("cannot get watchable by single filter: filter or input is null");
         }
 
-        return watchableRepository.findById(id)
-                .orElseThrow(() -> new WatchableNotFoundException(id));
+        return switch (filterDto.searchFilter()) {
+            case TITLE -> getAllByTitle(watchables, filterDto.input());
+            case ACTORS -> getAllByActor(watchables, filterDto.input());
+            case DIRECTORS -> getAllByDirector(watchables, filterDto.input());
+            case GENRES -> getAllByGenre(watchables, filterDto.input());
+            default -> throw new IllegalArgumentException("cannot get watchable by single filter: Invalid filter");
+        };
+    }
+
+    public List<Watchable> getAllByMultipleFilters(List<FilterDto> filterDtos) {
+
+        if (filterDtos == null) {
+            throw new InvalidParameterException("cannot get watchable by single filter: filter or input is null");
+        }
+
+        List<Watchable> watchables = watchableRepository.findAll();
+        if (!filterDtos.isEmpty()) {
+            for (FilterDto filterDto : filterDtos) {
+                watchables = getAllBySingleFilter(watchables, filterDto);
+            }
+        }
+
+        return watchables;
     }
 
     public Watchable create(WatchableInDto in) {

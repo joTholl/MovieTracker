@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import org.example.backend.dtos.FilterDto;
 import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.services.WatchableService;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Filter;
 
 @RestController
 @RequestMapping("/api/watchables")
@@ -25,35 +27,41 @@ public class WatchableController {
         return watchableService.getAll();
     }
 
-    //
-    @GetMapping("/title/{title}")
-    public List<Watchable> getAllByTitle(@PathVariable String title) {
-        return watchableService.getAllByTitle(title);
+    // GET
+    @GetMapping("/filtered")
+    public List<Watchable> getAllByFilters(@RequestBody List<FilterDto> filters){
+        return watchableService.getAllByMultipleFilters(filters);
     }
 
-    // GET
-    @GetMapping("/actors/{actor}")
-    public List<Watchable> getAllByActor(@PathVariable String actor) {
-        return watchableService.getAllByActor(actor);
-    }
-
-    // GET
-    @GetMapping("/directors/{director}")
-    public List<Watchable> getAllByDirector(@PathVariable String director) {
-        return watchableService.getAllByDirector(director);
-    }
-
-    // GET
-    @GetMapping("/genres/{genre}")
-    public List<Watchable> getAllByGenre(@PathVariable String genre) {
-        return watchableService.getAllByGenre(genre);
-    }
-
-    // GET
-    @GetMapping("/year/{year}")
-    public List<Watchable> getAllByReleaseYear(@PathVariable int year) {
-        return watchableService.getAllByReleaseYear(year);
-    }
+//    //
+//    @GetMapping("/title/{title}")
+//    public List<Watchable> getAllByTitle(@PathVariable String title) {
+//        return watchableService.getAllByTitle(title);
+//    }
+//
+//    // GET
+//    @GetMapping("/actors/{actor}")
+//    public List<Watchable> getAllByActor(@PathVariable String actor) {
+//        return watchableService.getAllByActor(actor);
+//    }
+//
+//    // GET
+//    @GetMapping("/directors/{director}")
+//    public List<Watchable> getAllByDirector(@PathVariable String director) {
+//        return watchableService.getAllByDirector(director);
+//    }
+//
+//    // GET
+//    @GetMapping("/genres/{genre}")
+//    public List<Watchable> getAllByGenre(@PathVariable String genre) {
+//        return watchableService.getAllByGenre(genre);
+//    }
+//
+//    // GET
+//    @GetMapping("/year/{year}")
+//    public List<Watchable> getAllByReleaseYear(@PathVariable int year) {
+//        return watchableService.getAllByReleaseYear(year);
+//    }
 
     // GET
     @GetMapping("/{id}")

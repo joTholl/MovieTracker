@@ -87,6 +87,7 @@ public class MovieSeriesService {
                 orElseThrow(() -> new NoSuchElementException("Movie Series with id " + id + " does not exist"));
 
 
+
         MovieSeries updated = toUpdate
                 .withTitle(updateDto.title())
                 .withMovieIds(updateDto.movieIds());

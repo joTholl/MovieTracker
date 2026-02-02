@@ -233,4 +233,88 @@ class WatchableControllerTest {
         Exception ex = result.getResolvedException();
         assertNull(ex);
     }
+
+    @Test
+    void getAllByFilters() throws Exception{
+
+        Watchable inception = new Watchable(
+                "2010-inc",
+                "Inception",
+                List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+                "2h 28m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2010, 7, 16),
+                List.of("Sci-Fi", "Action", "Thriller"),
+                0,
+                12
+        );
+
+        Watchable shutterIsland = new Watchable(
+                "2010-shi",
+                "Shutter Island",
+                List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley"),
+                "2h 18m",
+                List.of("Martin Scorsese"),
+                LocalDate.of(2010, 2, 19),
+                List.of("Thriller", "Mystery", "Drama"),
+                0,
+                16
+        );
+
+        Watchable theSocialNetwork = new Watchable(
+                "2010-tsn",
+                "The Social Network",
+                List.of("Leonardo DiCaprio", "Andrew Garfield", "Justin Timberlake"),
+                "2h 0m",
+                List.of("David Fincher"),
+                LocalDate.of(2010, 10, 1),
+                List.of("Drama", "Biography"),
+                0,
+                12
+        );
+
+        watchableRepository.save(inception);
+        watchableRepository.save(shutterIsland);
+        watchableRepository.save(theSocialNetwork);
+
+        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(
+                """
+                [
+                  {
+                    "id": "2010-tsn",
+                    "title": "The Social Network",
+                    "actors": ["Leonardo DiCaprio", "Andrew Garfield", "Justin Timberlake"],
+                    "duration": "2h 0m",
+                    "directors": ["David Fincher"],
+                    "releaseDate": "2010-10-01",
+                    "genres": ["Drama", "Biography"],
+                    "episode": 0,
+                    "ageRating": 12
+                  }
+                ]
+                """);
+
+        MvcResult result = mockMvc.perform(get("/api/watchables/filtered")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                          [
+                            {
+                              "searchFilter": "ACTORS",
+                              "input":"Leonardo DiCaprio"
+                            },
+                            {
+                              "searchFilter": "GENRES",
+                              "input": "Biography"
+                            }
+                          ]
+                        """))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonMatch)
+                .andReturn();
+
+
+        Exception ex = result.getResolvedException();
+        assertNull(ex);
+    }
 }

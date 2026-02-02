@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.dtos.FilterDto;
 import org.example.backend.exceptions.IdIsNullException;
 import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.dtos.WatchableInDto;
@@ -8,10 +9,12 @@ import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static org.example.backend.enums.SearchFilter.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -23,7 +26,7 @@ class WatchableServiceTest {
 //    @InjectMocks
 //    private WatchableService watchableService;
 
-    WatchableRepository watchableRepository =  Mockito.mock(WatchableRepository.class);
+    WatchableRepository watchableRepository = Mockito.mock(WatchableRepository.class);
     WatchableService watchableService = new WatchableService(watchableRepository);
 
     private final LocalDate fakeDate = LocalDate.of(2014, 6, 15);
@@ -274,10 +277,9 @@ class WatchableServiceTest {
         when(watchableRepository.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Watchable> result = watchableService.getAllByTitle("Inc");
+        List<Watchable> result = watchableService.getAllByTitle(expected, "Inception");
 
         // THEN
-        assertEquals(3, expected.size());
         assertEquals(1, result.size());
         assertEquals(expected.getFirst(), result.getFirst());
         assertNotEquals(expected, result);
@@ -329,7 +331,7 @@ class WatchableServiceTest {
         when(watchableRepository.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Watchable> result = watchableService.getAllByActor("Leo");
+        List<Watchable> result = watchableService.getAllByActor(expected, "Leonardo DiCaprio");
 
         // THEN
         assertEquals(3, result.size());
@@ -365,29 +367,29 @@ class WatchableServiceTest {
                 12
         );
 
-        Watchable theDarkKnight = new Watchable(
-                "nolan-tdk-2008",
-                "The Dark Knight",
-                List.of("Christian Bale", "Heath Ledger", "Aaron Eckhart"),
-                "2h 32m",
-                List.of("Christopher Nolan"),
-                LocalDate.of(2008, 7, 18),
-                List.of("Action", "Crime", "Drama"),
+        Watchable shutterIsland = new Watchable(
+                "shi-2010",
+                "Shutter Island",
+                List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley"),
+                "2h 18m",
+                List.of("Martin Scorsese"),
+                LocalDate.of(2010, 2, 19),
+                List.of("Thriller", "Mystery", "Drama"),
                 0,
                 16
         );
 
-        List<Watchable> expected = List.of(inception, interstellar, theDarkKnight);
+        List<Watchable> expected = List.of(inception, interstellar, shutterIsland);
 
         when(watchableRepository.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Watchable> result = watchableService.getAllByDirector("Christopher Nolan");
+        List<Watchable> result = watchableService.getAllByDirector(expected, "Christopher Nolan");
 
         // THEN
-        assertEquals(3, result.size());
+        assertEquals(2, result.size());
         assertEquals(inception, result.getFirst());
-        assertEquals(expected, result);
+        assertNotEquals(expected, result);
         verify(watchableRepository, times(1)).findAll();
         verifyNoMoreInteractions(watchableRepository);
     }
@@ -418,29 +420,29 @@ class WatchableServiceTest {
                 16
         );
 
-        Watchable bladeRunner = new Watchable(
-                "scifi-br-1982",
-                "Blade Runner",
-                List.of("Harrison Ford", "Rutger Hauer", "Sean Young"),
-                "1h 57m",
-                List.of("Ridley Scott"),
-                LocalDate.of(1982, 6, 25),
-                List.of("Sci-Fi", "Thriller"),
+        Watchable shutterIsland = new Watchable(
+                "shi-2010",
+                "Shutter Island",
+                List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley"),
+                "2h 18m",
+                List.of("Martin Scorsese"),
+                LocalDate.of(2010, 2, 19),
+                List.of("Thriller", "Mystery", "Drama"),
                 0,
                 16
         );
 
-        List<Watchable> expected = List.of(inception, theMatrix, bladeRunner);
+        List<Watchable> expected = List.of(inception, theMatrix, shutterIsland);
 
         when(watchableRepository.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Watchable> result = watchableService.getAllByGenre("Sci-Fi");
+        List<Watchable> result = watchableService.getAllByGenre(expected,"Sci-Fi");
 
         // THEN
-        assertEquals(3, result.size());
+        assertEquals(2, result.size());
         assertEquals(inception, result.getFirst());
-        assertEquals(expected, result);
+        assertNotEquals(expected, result);
         verify(watchableRepository, times(1)).findAll();
         verifyNoMoreInteractions(watchableRepository);
     }
@@ -499,4 +501,121 @@ class WatchableServiceTest {
     }
 
 
+    @Test
+    void getAllBySingleFilter_shouldThrowException_whenFilterDtoIsNull() throws Exception {
+
+        Exception ex = assertThrows(InvalidParameterException.class, () -> watchableService.getAllBySingleFilter(null, null));
+        assertNotNull(ex);
+    }
+
+    @Test
+    void getAllBySingleFilter_shouldPass_whenGivenFilterIsApplied() {
+
+        //GIVEN
+        Watchable inception = new Watchable(
+                "2010-inc",
+                "Inception",
+                List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+                "2h 28m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2010, 7, 16),
+                List.of("Sci-Fi", "Action", "Thriller"),
+                0,
+                12
+        );
+
+        Watchable shutterIsland = new Watchable(
+                "2010-shi",
+                "Shutter Island",
+                List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley"),
+                "2h 18m",
+                List.of("Martin Scorsese"),
+                LocalDate.of(2010, 2, 19),
+                List.of("Thriller", "Mystery", "Drama"),
+                0,
+                16
+        );
+
+        Watchable theSocialNetwork = new Watchable(
+                "2010-tsn",
+                "The Social Network",
+                List.of("Jesse Eisenberg", "Andrew Garfield", "Justin Timberlake"),
+                "2h 0m",
+                List.of("David Fincher"),
+                LocalDate.of(2010, 10, 1),
+                List.of("Drama", "Biography"),
+                0,
+                12
+        );
+
+        //THEN
+        List<Watchable> expected = List.of(inception, shutterIsland, theSocialNetwork);
+        List<Watchable> result = watchableService.getAllBySingleFilter(expected, new FilterDto(ACTORS, "Leonardo DiCaprio"));
+
+        assertEquals(2, result.size());
+        assertEquals(result.getFirst(), inception);
+        assertEquals(result.get(1), shutterIsland);
+    }
+
+    @Test
+    void getAllByMultipleFilter_shouldThrowException_whenFilterDtoIsNull() throws Exception {
+        Exception ex = assertThrows(InvalidParameterException.class, () -> watchableService.getAllByMultipleFilters(null));
+        assertNotNull(ex);
+    }
+
+    @Test
+    void getAllByMultiFilter_shouldPass_whenGivenFilterAreApplied() {
+        //GIVEN
+        Watchable inception = new Watchable(
+                "2010-inc",
+                "Inception",
+                List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+                "2h 28m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2010, 7, 16),
+                List.of("Sci-Fi", "Action", "Thriller"),
+                0,
+                12
+        );
+
+        Watchable shutterIsland = new Watchable(
+                "2010-shi",
+                "Shutter Island",
+                List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley"),
+                "2h 18m",
+                List.of("Martin Scorsese"),
+                LocalDate.of(2010, 2, 19),
+                List.of("Thriller", "Mystery", "Drama"),
+                0,
+                16
+        );
+
+        Watchable theSocialNetwork = new Watchable(
+                "2010-tsn",
+                "The Social Network",
+                List.of("Leonardo DiCaprio", "Andrew Garfield", "Justin Timberlake"),
+                "2h 0m",
+                List.of("David Fincher"),
+                LocalDate.of(2010, 10, 1),
+                List.of("Drama", "Biography"),
+                0,
+                12
+        );
+
+        List<Watchable> given = List.of(inception, shutterIsland, theSocialNetwork);
+        when(watchableRepository.findAll()).thenReturn(given);
+
+        FilterDto filter1 = new FilterDto(ACTORS, "Leonardo DiCaprio");
+        FilterDto filter2 = new FilterDto(GENRES, "Biography");
+        List<FilterDto> filters = List.of(filter1, filter2);
+
+        //THEN
+        List<Watchable> expected = List.of(theSocialNetwork);
+        List<Watchable> result = watchableService.getAllByMultipleFilters(filters);
+
+        assertEquals(1, result.size());
+        assertEquals(expected, result);
+        assertEquals(result.getFirst(), theSocialNetwork);
+        verify(watchableRepository, times(1)).findAll();
+    }
 }

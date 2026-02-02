@@ -25,6 +25,36 @@ public class WatchableController {
         return watchableService.getAll();
     }
 
+    //
+    @GetMapping("/title/{title}")
+    public List<Watchable> getAllByTitle(@PathVariable String title) {
+        return watchableService.getAllByTitle(title);
+    }
+
+    // GET
+    @GetMapping("/actors/{actor}")
+    public List<Watchable> getAllByActor(@PathVariable String actor) {
+        return watchableService.getAllByActor(actor);
+    }
+
+    // GET
+    @GetMapping("/directors/{director}")
+    public List<Watchable> getAllByDirector(@PathVariable String director) {
+        return watchableService.getAllByDirector(director);
+    }
+
+    // GET
+    @GetMapping("/genres/{genre}")
+    public List<Watchable> getAllByGenre(@PathVariable String genre) {
+        return watchableService.getAllByGenre(genre);
+    }
+
+    // GET
+    @GetMapping("/year/{year}")
+    public List<Watchable> getAllByReleaseYear(@PathVariable int year) {
+        return watchableService.getAllByReleaseYear(year);
+    }
+
     // GET
     @GetMapping("/{id}")
     public Watchable getById(@PathVariable String id) {

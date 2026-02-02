@@ -8,6 +8,7 @@ import org.example.backend.models.Watchable;
 import org.example.backend.repositories.WatchableRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -21,6 +22,53 @@ public class WatchableService {
 
     public List<Watchable> getAll() {
         return watchableRepository.findAll();
+    }
+
+    public List<Watchable> getAllByTitle(String title) {
+
+        String normalizedTitle = title.trim().toLowerCase();
+        return watchableRepository.findAll()
+                .stream().filter(watchable -> watchable.title().trim().toLowerCase().contains(normalizedTitle)).toList();
+    }
+
+    public List<Watchable> getAllByActor(String actorName) {
+
+        String actorNameNormalized = actorName.trim().toLowerCase();
+
+        return watchableRepository.findAll()
+                .stream()
+                .filter(watchable -> watchable.actors()
+                        .stream()
+                        .anyMatch(actor -> actor.trim().toLowerCase().contains(actorNameNormalized)))
+                .toList();
+    }
+
+    public List<Watchable> getAllByDirector(String directorName) {
+
+        String directorNameNormalized = directorName.trim().toLowerCase();
+
+        return watchableRepository.findAll()
+                .stream()
+                .filter(watchable -> watchable.directors()
+                        .stream()
+                        .anyMatch(director -> director.trim().toLowerCase().contains(directorNameNormalized)))
+                .toList();
+    }
+
+    public List<Watchable> getAllByGenre(String inGenre) {
+        String genreNameNormalized = inGenre.trim().toLowerCase();
+
+        return watchableRepository.findAll()
+                .stream()
+                .filter(watchable -> watchable.genres()
+                        .stream()
+                        .anyMatch(genre -> genre.trim().toLowerCase().contains(genreNameNormalized)))
+                .toList();
+    }
+
+    public List<Watchable> getAllByReleaseYear(int year) {
+        return watchableRepository.findAll()
+                .stream().filter(watchable -> watchable.releaseDate().getYear() == year).toList();
     }
 
     public Watchable getById(String id) {

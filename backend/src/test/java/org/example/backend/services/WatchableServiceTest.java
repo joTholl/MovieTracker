@@ -31,7 +31,7 @@ class WatchableServiceTest {
     @Test
     void getAll_ShouldReturnListOfSizeOne_ContainingGivenWatchable() {
 
-        // given
+        // GIVEN
         Watchable w1 = new Watchable(
                 "1",
                 "Interstellar",
@@ -48,10 +48,10 @@ class WatchableServiceTest {
 
         when(watchableRepository.findAll()).thenReturn(expected);
 
-        // when
+        // WHEN
         List<Watchable> result = watchableService.getAll();
 
-        // then
+        // THEN
         assertEquals(1, result.size());
         assertEquals(w1, result.getFirst());
         assertEquals(expected, result);
@@ -230,4 +230,273 @@ class WatchableServiceTest {
         verify(watchableRepository, times(1)).save(existing);
         verifyNoMoreInteractions(watchableRepository);
     }
+
+    @Test
+    void getAllByTitle() {
+        Watchable inception = new Watchable(
+                "2010-inc",
+                "Inception",
+                List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+                "2h 28m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2010, 7, 16),
+                List.of("Sci-Fi", "Action", "Thriller"),
+                0,
+                12
+        );
+
+        Watchable shutterIsland = new Watchable(
+                "2010-shi",
+                "Shutter Island",
+                List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley"),
+                "2h 18m",
+                List.of("Martin Scorsese"),
+                LocalDate.of(2010, 2, 19),
+                List.of("Thriller", "Mystery", "Drama"),
+                0,
+                16
+        );
+
+        Watchable theSocialNetwork = new Watchable(
+                "2010-tsn",
+                "The Social Network",
+                List.of("Jesse Eisenberg", "Andrew Garfield", "Justin Timberlake"),
+                "2h 0m",
+                List.of("David Fincher"),
+                LocalDate.of(2010, 10, 1),
+                List.of("Drama", "Biography"),
+                0,
+                12
+        );
+
+        List<Watchable> expected = List.of(inception, shutterIsland, theSocialNetwork);
+
+        when(watchableRepository.findAll()).thenReturn(expected);
+
+        // WHEN
+        List<Watchable> result = watchableService.getAllByTitle("Inc");
+
+        // THEN
+        assertEquals(3, expected.size());
+        assertEquals(1, result.size());
+        assertEquals(expected.getFirst(), result.getFirst());
+        assertNotEquals(expected, result);
+        verify(watchableRepository, times(1)).findAll();
+        verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
+    void getAllByActor_shouldReturnGivenList_whenSearchingForActor() {
+        // GIVEN
+        Watchable inception = new Watchable(
+                "inc-2010",
+                "Inception",
+                List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+                "2h 28m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2010, 7, 16),
+                List.of("Sci-Fi", "Action", "Thriller"),
+                0,
+                12
+        );
+
+        Watchable titanic = new Watchable(
+                "tit-1997",
+                "Titanic",
+                List.of("Leonardo DiCaprio", "Kate Winslet", "Billy Zane"),
+                "3h 15m",
+                List.of("James Cameron"),
+                LocalDate.of(1997, 12, 19),
+                List.of("Drama", "Romance"),
+                0,
+                12
+        );
+
+        Watchable shutterIsland = new Watchable(
+                "shi-2010",
+                "Shutter Island",
+                List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley"),
+                "2h 18m",
+                List.of("Martin Scorsese"),
+                LocalDate.of(2010, 2, 19),
+                List.of("Thriller", "Mystery", "Drama"),
+                0,
+                16
+        );
+
+        List<Watchable> expected = List.of(inception, titanic, shutterIsland);
+
+        when(watchableRepository.findAll()).thenReturn(expected);
+
+        // WHEN
+        List<Watchable> result = watchableService.getAllByActor("Leo");
+
+        // THEN
+        assertEquals(3, result.size());
+        assertEquals(inception, result.getFirst());
+        assertEquals(expected, result);
+        verify(watchableRepository, times(1)).findAll();
+        verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
+    void getAllByDirectors() {
+        Watchable inception = new Watchable(
+                "nolan-inc-2010",
+                "Inception",
+                List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+                "2h 28m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2010, 7, 16),
+                List.of("Sci-Fi", "Action", "Thriller"),
+                0,
+                12
+        );
+
+        Watchable interstellar = new Watchable(
+                "nolan-int-2014",
+                "Interstellar",
+                List.of("Matthew McConaughey", "Anne Hathaway", "Jessica Chastain"),
+                "2h 49m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2014, 11, 7),
+                List.of("Sci-Fi", "Drama", "Adventure"),
+                0,
+                12
+        );
+
+        Watchable theDarkKnight = new Watchable(
+                "nolan-tdk-2008",
+                "The Dark Knight",
+                List.of("Christian Bale", "Heath Ledger", "Aaron Eckhart"),
+                "2h 32m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2008, 7, 18),
+                List.of("Action", "Crime", "Drama"),
+                0,
+                16
+        );
+
+        List<Watchable> expected = List.of(inception, interstellar, theDarkKnight);
+
+        when(watchableRepository.findAll()).thenReturn(expected);
+
+        // WHEN
+        List<Watchable> result = watchableService.getAllByDirector("Christopher Nolan");
+
+        // THEN
+        assertEquals(3, result.size());
+        assertEquals(inception, result.getFirst());
+        assertEquals(expected, result);
+        verify(watchableRepository, times(1)).findAll();
+        verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
+    void getAllByGenre() {
+        Watchable inception = new Watchable(
+                "scifi-inc-2010",
+                "Inception",
+                List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+                "2h 28m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2010, 7, 16),
+                List.of("Sci-Fi", "Action", "Thriller"),
+                0,
+                12
+        );
+
+        Watchable theMatrix = new Watchable(
+                "scifi-mtx-1999",
+                "The Matrix",
+                List.of("Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss"),
+                "2h 16m",
+                List.of("Lana Wachowski", "Lilly Wachowski"),
+                LocalDate.of(1999, 3, 31),
+                List.of("Sci-Fi", "Action"),
+                0,
+                16
+        );
+
+        Watchable bladeRunner = new Watchable(
+                "scifi-br-1982",
+                "Blade Runner",
+                List.of("Harrison Ford", "Rutger Hauer", "Sean Young"),
+                "1h 57m",
+                List.of("Ridley Scott"),
+                LocalDate.of(1982, 6, 25),
+                List.of("Sci-Fi", "Thriller"),
+                0,
+                16
+        );
+
+        List<Watchable> expected = List.of(inception, theMatrix, bladeRunner);
+
+        when(watchableRepository.findAll()).thenReturn(expected);
+
+        // WHEN
+        List<Watchable> result = watchableService.getAllByGenre("Sci-Fi");
+
+        // THEN
+        assertEquals(3, result.size());
+        assertEquals(inception, result.getFirst());
+        assertEquals(expected, result);
+        verify(watchableRepository, times(1)).findAll();
+        verifyNoMoreInteractions(watchableRepository);
+    }
+
+    @Test
+    void getAllByReleaseYear() {
+        Watchable inception = new Watchable(
+                "2010-inc",
+                "Inception",
+                List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"),
+                "2h 28m",
+                List.of("Christopher Nolan"),
+                LocalDate.of(2010, 7, 16),
+                List.of("Sci-Fi", "Action", "Thriller"),
+                0,
+                12
+        );
+
+        Watchable shutterIsland = new Watchable(
+                "2010-shi",
+                "Shutter Island",
+                List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley"),
+                "2h 18m",
+                List.of("Martin Scorsese"),
+                LocalDate.of(2010, 2, 19),
+                List.of("Thriller", "Mystery", "Drama"),
+                0,
+                16
+        );
+
+        Watchable theSocialNetwork = new Watchable(
+                "2010-tsn",
+                "The Social Network",
+                List.of("Jesse Eisenberg", "Andrew Garfield", "Justin Timberlake"),
+                "2h 0m",
+                List.of("David Fincher"),
+                LocalDate.of(2010, 10, 1),
+                List.of("Drama", "Biography"),
+                0,
+                12
+        );
+
+        List<Watchable> expected = List.of(inception, shutterIsland, theSocialNetwork);
+
+        when(watchableRepository.findAll()).thenReturn(expected);
+
+        // WHEN
+        List<Watchable> result = watchableService.getAllByReleaseYear(2010);
+
+        // THEN
+        assertEquals(3, result.size());
+        assertEquals(inception, result.getFirst());
+        assertEquals(expected, result);
+        verify(watchableRepository, times(1)).findAll();
+        verifyNoMoreInteractions(watchableRepository);
+    }
+
+
 }

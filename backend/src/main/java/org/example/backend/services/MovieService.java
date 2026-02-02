@@ -112,6 +112,7 @@ public class MovieService {
         if(!repo.existsById(id)) {
             throw new MovieNotFoundException(id);
         }
+        watchableService.deleteById(getMovieById(id).watchableID());
         repo.deleteById(id);
         return true;
     }

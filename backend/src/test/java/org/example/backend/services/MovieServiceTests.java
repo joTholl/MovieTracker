@@ -26,7 +26,8 @@ public class MovieServiceTests {
     void getMovieById_ShouldReturnSearchedMovie() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
-        Movie movie = new Movie("1", "8", streamable);
+
+        Movie movie = new Movie("1", "8", streamable, "abc");
         when(mockRepo.findById(movie.id())).thenReturn(Optional.of(movie));
 
         //WHEN
@@ -53,7 +54,7 @@ public class MovieServiceTests {
     void createMovie_ShouldReturnNewMovie() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
-        MovieInDto movie = new MovieInDto("8", streamable);
+        MovieInDto movie = new MovieInDto("8", streamable, "abc");
         when(mockRepo.save(any(Movie.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         //WHEN
@@ -71,7 +72,7 @@ public class MovieServiceTests {
     void deleteMovie_ShouldReturnTrueIfDeletedSuccessfull() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
-        Movie movie = new Movie("1", "8", streamable);
+        Movie movie = new Movie("1", "8", streamable, "abc");
         when(mockRepo.existsById("1")).thenReturn(true);
         doNothing().when(mockRepo).deleteById("1");
 
@@ -99,8 +100,8 @@ public class MovieServiceTests {
     @Test
     void changeMovie_ShouldUpdateMovie() {
         List<String> streamable = List.of("Amazon", "Prime");
-        Movie movie = new Movie("1", "8", streamable);
-        MovieInDto newMovie = new MovieInDto("9", streamable);
+        Movie movie = new Movie("1", "8", streamable, "abc");
+        MovieInDto newMovie = new MovieInDto("9", streamable, "abc");
         when(mockRepo.findById("1")).thenReturn(Optional.of(movie));
         when(mockRepo.save(any(Movie.class))).thenAnswer(invocation -> invocation.getArgument(0));
         //WHEN
@@ -119,7 +120,7 @@ public class MovieServiceTests {
     void changeMovie_ShouldThrowExceptionIfNoIdFound() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
-        MovieInDto movie = new MovieInDto("1", streamable);
+        MovieInDto movie = new MovieInDto("1", streamable, "abc");
         String emptyID = "";
 
         //THEN

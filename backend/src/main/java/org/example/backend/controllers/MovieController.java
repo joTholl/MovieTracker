@@ -12,7 +12,6 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService service;
-
     public MovieController(MovieService service) {
         this.service = service;
     }

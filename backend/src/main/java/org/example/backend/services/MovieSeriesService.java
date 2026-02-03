@@ -41,7 +41,7 @@ public class MovieSeriesService {
         return movieSeriesRepository.findAll();
     }
 
-    public MovieSeriesOutDto findById(String id) {
+    public MovieSeriesOutDto getById(String id) {
 
         if (id == null) {
             return null;
@@ -96,13 +96,12 @@ public class MovieSeriesService {
         return new MovieSeriesOutDto(updated.id(), updated.title(), outMovies);
     }
 
-    public boolean deleteById(String id){
+    public void delete(String id){
 
         if (id == null) {
-            return false;
+            return;
         }
 
         movieSeriesRepository.deleteById(id);
-        return !movieSeriesRepository.existsById(id);
     }
 }

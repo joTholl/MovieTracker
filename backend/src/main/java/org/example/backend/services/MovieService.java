@@ -1,10 +1,13 @@
 package org.example.backend.services;
 
+import org.example.backend.dtos.MovieOutDto;
+import org.example.backend.exceptions.MovieNotFoundException;
 import org.example.backend.models.Movie;
-import org.example.backend.dtos.MovieDto;
+import org.example.backend.dtos.MovieInDto;
 import org.example.backend.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -12,9 +15,11 @@ import java.util.UUID;
 @Service
 public class MovieService {
     private final MovieRepository repo;
+    private final WatchableService watchableService;
 
-    public MovieService(MovieRepository repo) {
+    public MovieService(MovieRepository repo, WatchableService watchableService) {
         this.repo = repo;
+        this.watchableService = watchableService;
     }
 
     public String randomId() {
@@ -28,14 +33,24 @@ public class MovieService {
     }
 
 
-    public List<Movie> getAllMovies() {
-        return repo.findAll();
+    public List<MovieOutDto> getAllMovies() {
+        List<Movie> allMovies = repo.findAll();
+        List<MovieOutDto> returnList = new ArrayList<>();
+
+        for(Movie movie : allMovies) {
+            returnList.add(new MovieOutDto(movie, watchableService));
+        }
+
+        return returnList;
     }
 
     public Movie getMovieById(String id) {
-        if(id == null || id.isEmpty()) return null;
+        return repo.findById(id).orElseThrow(() -> new MovieNotFoundException(id));
+    }
 
-        return repo.findById(id).orElse(null);
+    public MovieOutDto getMovieOutDtoById(String id) {
+        Movie movie = getMovieById(id);
+        return new MovieOutDto(movie, watchableService);
     }
 
     /** Auskommentiert weil WatchableRepo noch fehlt
@@ -69,17 +84,13 @@ public class MovieService {
     }
      **/
 
-    public Movie createMovie(MovieDto movieToCreateDto) {
+    public Movie createMovie(MovieInDto movieToCreateDto) {
         Movie movie = new Movie(randomId(), movieToCreateDto.watchableID(), movieToCreateDto.streamable());
         return repo.save(movie);
     }
 
-    public Movie changeMovie(String id, MovieDto newMovie) {
-        Movie movie = repo.findById(id).orElse(null);
-
-        if(movie == null) {
-            return null;
-        }
+    public Movie changeMovie(String id, MovieInDto newMovie) {
+        Movie movie = repo.findById(id).orElseThrow(() -> new MovieNotFoundException(id));
 
         String watchable = movie.watchableID();
         List<String> streamable = movie.streamable();
@@ -99,7 +110,7 @@ public class MovieService {
     }
     public boolean deleteMovie(String id) {
         if(!repo.existsById(id)) {
-            return false;
+            throw new MovieNotFoundException(id);
         }
         repo.deleteById(id);
         return true;

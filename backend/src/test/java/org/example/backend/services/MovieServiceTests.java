@@ -1,14 +1,16 @@
 package org.example.backend.services;
 
+import org.example.backend.exceptions.MovieNotFoundException;
 import org.example.backend.models.Movie;
-import org.example.backend.dtos.MovieDto;
+import org.example.backend.dtos.MovieInDto;
 import org.example.backend.repositories.MovieRepository;
+import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -16,7 +18,9 @@ import static org.mockito.Mockito.*;
 public class MovieServiceTests {
 
     private final MovieRepository mockRepo = mock(MovieRepository.class);
-    private final MovieService service = new MovieService(mockRepo);
+    private final WatchableRepository mockRepoWatchable = mock(WatchableRepository.class);
+    private final WatchableService watchableService = new WatchableService(mockRepoWatchable);
+    private final MovieService service = new MovieService(mockRepo, watchableService);
 
     @Test
     void getMovieById_ShouldReturnSearchedMovie() {
@@ -34,24 +38,22 @@ public class MovieServiceTests {
     }
 
     @Test
-    void getMovieById_ShouldReturnNullIfNoId() {
+    void getMovieById_ShouldThrowExceptionIfNoId() {
         //GIVEN
-        List<String> streamable = List.of("Amazon", "Prime");
-        Movie movie = new Movie("1", "8", streamable);
-        when(mockRepo.findById(movie.id())).thenReturn(Optional.of(movie));
-
-        //WHEN
-        Movie result = service.getMovieById("");
+        String emptyID = "";
+        when(mockRepo.findById(emptyID)).thenReturn(Optional.empty());
 
         //THEN
-        assertThat(result).isEqualTo(null);
+        assertThatThrownBy(() -> service.getMovieById(emptyID))
+                .isInstanceOf(MovieNotFoundException.class)
+                .hasMessage("Movie mit ID  nicht gefunden");
     }
 
     @Test
     void createMovie_ShouldReturnNewMovie() {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
-        MovieDto movie = new MovieDto("8", streamable);
+        MovieInDto movie = new MovieInDto("8", streamable);
         when(mockRepo.save(any(Movie.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         //WHEN
@@ -83,24 +85,22 @@ public class MovieServiceTests {
     }
 
     @Test
-    void deleteMovie_ShouldReturnFalseIfDeletedSuccessfull() {
+    void deleteMovie_ShouldThrowExceptionIfDeleteWasntSuccessfull() {
         //GIVEN
-        List<String> streamable = List.of("Amazon", "Prime");
-        Movie movie = new Movie("1", "8", streamable);
-        when(mockRepo.existsById("2")).thenReturn(false);
-
-        //WHEN
-        boolean result = service.deleteMovie("2");
+        String emptyID = "";
 
         //THEN
-        assertFalse(result);
+        assertThatThrownBy(() -> service.deleteMovie(emptyID))
+                .isInstanceOf(MovieNotFoundException.class)
+                .hasMessage("Movie mit ID  nicht gefunden");
+
     }
 
     @Test
     void changeMovie_ShouldUpdateMovie() {
         List<String> streamable = List.of("Amazon", "Prime");
         Movie movie = new Movie("1", "8", streamable);
-        MovieDto newMovie = new MovieDto("9", streamable);
+        MovieInDto newMovie = new MovieInDto("9", streamable);
         when(mockRepo.findById("1")).thenReturn(Optional.of(movie));
         when(mockRepo.save(any(Movie.class))).thenAnswer(invocation -> invocation.getArgument(0));
         //WHEN
@@ -113,6 +113,19 @@ public class MovieServiceTests {
         assertThat(result.streamable()).isEqualTo(streamable);
 
         verify(mockRepo).save(any(Movie.class));
+    }
+
+    @Test
+    void changeMovie_ShouldThrowExceptionIfNoIdFound() {
+        //GIVEN
+        List<String> streamable = List.of("Amazon", "Prime");
+        MovieInDto movie = new MovieInDto("1", streamable);
+        String emptyID = "";
+
+        //THEN
+        assertThatThrownBy(() -> service.changeMovie(emptyID, movie))
+                .isInstanceOf(MovieNotFoundException.class)
+                .hasMessage("Movie mit ID  nicht gefunden");
     }
 
 

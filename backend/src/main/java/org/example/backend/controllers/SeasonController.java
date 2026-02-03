@@ -1,7 +1,8 @@
 package org.example.backend.controllers;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.dtos.SeasonInDTO;
+import org.example.backend.dtos.SeasonInDto;
+import org.example.backend.dtos.SeasonUpdateDto;
 import org.example.backend.models.Season;
 import org.example.backend.services.SeasonService;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,13 @@ public class SeasonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Season createSeason(@RequestBody SeasonInDTO seasonInDTO) {
+    public Season createSeason(@RequestBody SeasonInDto seasonInDTO) {
         return seasonService.createSeason(seasonInDTO);
     }
 
     @PutMapping("/{id}")
-    public Season updateSeason(@PathVariable String id, @RequestBody SeasonInDTO seasonInDTO){
-        return seasonService.updateSeason(id, seasonInDTO);
+    public Season updateSeason(@PathVariable String id, @RequestBody SeasonUpdateDto seasonUpdateDTO){
+        return seasonService.updateSeason(id, seasonUpdateDTO);
     }
 
     @DeleteMapping("/{id}")

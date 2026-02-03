@@ -85,7 +85,7 @@ public class MovieService {
      **/
 
     public Movie createMovie(MovieInDto movieToCreateDto) {
-        Movie movie = new Movie(randomId(), movieToCreateDto.watchableID(), movieToCreateDto.streamable());
+        Movie movie = new Movie(randomId(), movieToCreateDto.watchableID(), movieToCreateDto.streamable(), movieToCreateDto.thumbnail());
         return repo.save(movie);
     }
 

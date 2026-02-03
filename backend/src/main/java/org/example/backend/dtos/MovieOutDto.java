@@ -6,9 +6,9 @@ import org.example.backend.services.WatchableService;
 
 import java.util.List;
 
-public record MovieOutDto(String id, Watchable watchable, List<String> streamable) {
+public record MovieOutDto(String id, Watchable watchable, List<String> streamable, String thumbnail) {
 
     public MovieOutDto(Movie movie, WatchableService service) {
-        this(movie.id(), service.getById(movie.watchableID()), movie.streamable());
+        this(movie.id(), service.getById(movie.watchableID()), movie.streamable(), movie.thumbnail());
     }
 }

@@ -5,6 +5,8 @@ import org.example.backend.dtos.MovieSeriesOutDto;
 import org.example.backend.dtos.MovieSeriesUpdateDto;
 import org.example.backend.models.MovieSeries;
 import org.example.backend.services.MovieSeriesService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,23 +25,28 @@ public class MovieSeriesController {
         return movieSeriesService.findAll();
     }
 
-    @GetMapping
-    public MovieSeriesOutDto getById(@RequestParam String id){
+    @GetMapping("/{id}")
+    public MovieSeriesOutDto getById(@PathVariable String id){
        return movieSeriesService.getById(id);
     }
 
     @PostMapping
-    public MovieSeriesOutDto create(@RequestBody MovieSeriesInDto inDto){
-       return movieSeriesService.create(inDto);
+    public ResponseEntity<MovieSeriesOutDto> create(@RequestBody MovieSeriesInDto inDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieSeriesService.create(inDto));
     }
 
-    @PutMapping
-    public MovieSeriesOutDto update(@RequestBody String id, MovieSeriesUpdateDto updateDto){
-        return movieSeriesService.update(id,  updateDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<MovieSeriesOutDto> update(@PathVariable String id, @RequestBody  MovieSeriesUpdateDto updateDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieSeriesService.update(id, updateDto));
     }
 
-    @DeleteMapping
-    public void delete(@RequestParam String id){
-        movieSeriesService.delete(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable String id){
+
+        if (movieSeriesService.deleteById(id)){
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 }

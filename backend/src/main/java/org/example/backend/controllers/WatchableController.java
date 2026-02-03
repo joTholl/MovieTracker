@@ -72,8 +72,7 @@ public class WatchableController {
     // POST
     @PostMapping
     public ResponseEntity<Watchable> create(@RequestBody WatchableInDto in) {
-        Watchable createdWatchable = watchableService.create(in);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdWatchable);
+        return ResponseEntity.status(HttpStatus.CREATED).body(watchableService.create(in));
     }
 
     // DELETE

@@ -40,12 +40,10 @@ class WatchableControllerTest {
         watchableRepository.deleteAll(); // ensures every test starts from empty DB
     }
 
-    private final LocalDate fakeDate = LocalDate.of(2014, 6, 15);
+    private final LocalDate fakeReleaseDate = LocalDate.of(2014, 6, 15);
 
     @Test
     void getAll() throws Exception {
-
-        LocalDateTime releaseDate = LocalDateTime.of(2018, Month.NOVEMBER, 24, 0, 0, 0);
 
         Watchable w1 = new Watchable(
                 "1",
@@ -53,7 +51,7 @@ class WatchableControllerTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                fakeDate,
+                fakeReleaseDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -76,7 +74,7 @@ class WatchableControllerTest {
                                     "ageRating": 12
                                   }
                                 ]
-                                """.formatted(fakeDate));
+                                """.formatted(fakeReleaseDate));
 
         // when + then
         mockMvc.perform(get("/api/watchables"))
@@ -97,7 +95,7 @@ class WatchableControllerTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                fakeDate,
+                fakeReleaseDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -117,7 +115,7 @@ class WatchableControllerTest {
                       "episode": 0,
                       "ageRating": 12
                 }
-                """.formatted(fakeDate));
+                """.formatted(fakeReleaseDate));
 
         // when + then
         mockMvc.perform(get("/api/watchables/1"))
@@ -144,11 +142,16 @@ class WatchableControllerTest {
                                       "episode": 0,
                                       "ageRating": 12
                                     }
-                                """.formatted(fakeDate)))
+                                """.formatted(fakeReleaseDate)))
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Interstellar"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.duration").value("02:49"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.directors").value("Christopher Nolan"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.directors").value("Christopher Nolan"))
+                 .andExpect(MockMvcResultMatchers.jsonPath("$.episode").value(0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ageRating").value(12))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.actors", org.hamcrest.Matchers.contains("Matthew McConaughey", "Anne Hathaway")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.directors", org.hamcrest.Matchers.contains("Christopher Nolan")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genres", org.hamcrest.Matchers.contains("SciFi", "Drama")));
     }
 
     @Test
@@ -161,7 +164,7 @@ class WatchableControllerTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                fakeDate,
+                fakeReleaseDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -196,7 +199,7 @@ class WatchableControllerTest {
                 List.of("Matthew McConaughey", "Anne Hathaway"),
                 "02:49",
                 List.of("Christopher Nolan"),
-                fakeDate,
+                fakeReleaseDate,
                 List.of("SciFi", "Drama"),
                 0,
                 12
@@ -217,12 +220,12 @@ class WatchableControllerTest {
                           "episode": 0,
                           "ageRating": 12
                         }
-                        """.formatted(fakeDate)))
+                        """.formatted(fakeReleaseDate)))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Interstellar"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.duration").value("02:49"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.releaseDate").value(fakeDate.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.releaseDate").value(fakeReleaseDate.toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.episode").value(0))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.ageRating").value(12))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.actors", org.hamcrest.Matchers.contains("Matthew McConaughey", "Anne Hathaway")))

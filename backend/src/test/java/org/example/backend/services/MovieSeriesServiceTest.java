@@ -16,8 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class MovieSeriesServiceTest {
 
@@ -28,9 +27,8 @@ class MovieSeriesServiceTest {
     @Test
     void findAll_shouldPass_andReturnTheGivenList() {
         // GIVEN
-
-        MovieSeries movieSeries1 =  new MovieSeries("1", "Batman", List.of("Batman Begins", "The Dark Knight","The Dark Knight rises"));
-        MovieSeries movieSeries2 =  new MovieSeries("2", "Star Wars", List.of("Episode 1", "Episode 2","Episode 3"));
+        MovieSeries movieSeries1 =  new MovieSeries("1", "Batman", List.of("1","2","3"));
+        MovieSeries movieSeries2 =  new MovieSeries("2", "Star Wars", List.of("4","5","6"));
         List<MovieSeries> expectedList = List.of(movieSeries1, movieSeries2);
         when(repo.findAll()).thenReturn(expectedList);
 
@@ -38,7 +36,6 @@ class MovieSeriesServiceTest {
         List<MovieSeries> actualList= movieSeriesService.findAll();
 
         // THEN
-
         assertEquals(2,actualList.size());
         assertEquals(expectedList,actualList);
 
@@ -48,7 +45,7 @@ class MovieSeriesServiceTest {
     @Test
     void getById_ShouldPass_andReturnTheGivenMovieSeries() {
 
-        MovieSeries movieSeries =  new MovieSeries("2", "Star Wars", List.of("Episode 1", "Episode 2","Episode 3"));
+        MovieSeries movieSeries =  new MovieSeries("2", "Star Wars", List.of("1","2","3"));
         when(repo.findById("2")).thenReturn(Optional.of(movieSeries));
 
         MovieSeriesOutDto actual = movieSeriesService.getById("2");
@@ -118,13 +115,11 @@ class MovieSeriesServiceTest {
     @Test
     void delete_shouldPass_andDeleteTheGivenMovieSeries() {
 
-        MovieSeries movieSeries =  new MovieSeries("2", "Star Wars", List.of("Episode 1", "Episode 2","Episode 3"));
-
         when(repo.existsById("2")).thenReturn(true);
 
-        movieSeriesService.delete("2");
+        movieSeriesService.deleteById("2");
 
-        verify(repo).existsById("2");
+        verify(repo, times(2)).existsById("2");
         verify(repo).deleteById("2");
     }
 }

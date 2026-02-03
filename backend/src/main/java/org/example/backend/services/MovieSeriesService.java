@@ -1,6 +1,8 @@
 package org.example.backend.services;
 
 import org.example.backend.dtos.*;
+import org.example.backend.exceptions.IdIsNullException;
+import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.models.Movie;
 import org.example.backend.models.MovieSeries;
@@ -97,10 +99,17 @@ public class MovieSeriesService {
         return new MovieSeriesOutDto(updated.id(), updated.title(), outMovies);
     }
 
-    public void delete(String id){
+    public boolean deleteById(String id){
+
+        if(id == null){
+            throw new IllegalArgumentException("cannot delete MovieSeries with id null");
+        }
 
         if (movieSeriesRepository.existsById(id)) {
             movieSeriesRepository.deleteById(id);
         }
+
+        // return needs to be inversed to trigger the right Http Response when called by Controller
+       return !movieSeriesRepository.existsById(id);
     }
 }

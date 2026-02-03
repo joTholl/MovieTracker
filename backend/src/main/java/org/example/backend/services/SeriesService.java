@@ -51,11 +51,11 @@ public class SeriesService {
     }
 
 
-    public Series updateSeries(String id, SeriesUpdateDto SeriesUpdateDTO) throws NoSuchElementException, ArgumentMismatchException {
+    public Series updateSeries(String id, SeriesUpdateDto seriesUpdateDTO) throws NoSuchElementException, ArgumentMismatchException {
         SeriesSeasonIdDto ssid = seriesRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Id not found"));
         List<Season> seasons = new ArrayList<>();
         List<String> seasonIds = new ArrayList<>();
-        for (Season season : SeriesUpdateDTO.seasons()) {
+        for (Season season : seriesUpdateDTO.seasons()) {
             if (ssid.seasonIds().contains(season.id())) {
                 seasons.add(seasonService.updateSeason(season.id(), new SeasonUpdateDto(season)));
                 seasonIds.add(season.id());
@@ -70,8 +70,8 @@ public class SeriesService {
                 seasonService.deleteSeason(seasonId);
             }
         }
-        seriesRepository.save(new SeriesSeasonIdDto(id,SeriesUpdateDTO.title(), seasonIds,SeriesUpdateDTO.imageUrl()));
-        return new Series(id, SeriesUpdateDTO.title(), seasons, SeriesUpdateDTO.imageUrl());
+        seriesRepository.save(new SeriesSeasonIdDto(id,seriesUpdateDTO.title(), seasonIds,seriesUpdateDTO.imageUrl()));
+        return new Series(id, seriesUpdateDTO.title(), seasons, seriesUpdateDTO.imageUrl());
     }
 
     public void deleteSeries(String id) {

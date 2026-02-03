@@ -38,6 +38,7 @@ public class MovieSeriesService {
     }
 
     public List<MovieSeries> findAll() {
+
         return movieSeriesRepository.findAll();
     }
 
@@ -98,10 +99,8 @@ public class MovieSeriesService {
 
     public void delete(String id){
 
-        if (id == null) {
-            return;
+        if (movieSeriesRepository.existsById(id)) {
+            movieSeriesRepository.deleteById(id);
         }
-
-        movieSeriesRepository.deleteById(id);
     }
 }

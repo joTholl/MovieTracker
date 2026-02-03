@@ -73,15 +73,24 @@ public class MovieServiceTests {
         //GIVEN
         List<String> streamable = List.of("Amazon", "Prime");
         Movie movie = new Movie("1", "8", streamable, "abc");
+
         when(mockRepo.existsById("1")).thenReturn(true);
+        when(mockRepo.findById("1")).thenReturn(Optional.of(movie));
+
+        WatchableService mockWatchableService = mock(WatchableService.class);
+        when(mockWatchableService.deleteById("8")).thenReturn(true);
+
+        MovieService serviceWithMockWatchable = new MovieService(mockRepo, mockWatchableService);
+
         doNothing().when(mockRepo).deleteById("1");
 
         //WHEN
-        boolean result = service.deleteMovie("1");
+        boolean result = serviceWithMockWatchable.deleteMovie(movie.id());
 
         //THEN
         assertTrue(result);
 
+        verify(mockWatchableService).deleteById("8");
         verify(mockRepo).deleteById("1");
     }
 

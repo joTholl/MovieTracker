@@ -277,7 +277,7 @@ class WatchableServiceTest {
         when(watchableRepository.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Watchable> result = watchableService.getAllByTitle(expected, "Inception");
+        List<Watchable> result = watchableService.getAllByTitle(watchableRepository.findAll(), "Inception");
 
         // THEN
         assertEquals(1, result.size());
@@ -331,7 +331,7 @@ class WatchableServiceTest {
         when(watchableRepository.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Watchable> result = watchableService.getAllByActor(expected, "Leonardo DiCaprio");
+        List<Watchable> result = watchableService.getAllByActor(watchableRepository.findAll(), "Leonardo DiCaprio");
 
         // THEN
         assertEquals(3, result.size());
@@ -384,7 +384,7 @@ class WatchableServiceTest {
         when(watchableRepository.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Watchable> result = watchableService.getAllByDirector(expected, "Christopher Nolan");
+        List<Watchable> result = watchableService.getAllByDirector(watchableRepository.findAll(), "Christopher Nolan");
 
         // THEN
         assertEquals(2, result.size());
@@ -437,7 +437,7 @@ class WatchableServiceTest {
         when(watchableRepository.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Watchable> result = watchableService.getAllByGenre(expected,"Sci-Fi");
+        List<Watchable> result = watchableService.getAllByGenre(watchableRepository.findAll(),"Sci-Fi");
 
         // THEN
         assertEquals(2, result.size());

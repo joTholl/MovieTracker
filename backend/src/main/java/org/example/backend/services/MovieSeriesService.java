@@ -1,8 +1,6 @@
 package org.example.backend.services;
 
 import org.example.backend.dtos.*;
-import org.example.backend.exceptions.IdIsNullException;
-import org.example.backend.exceptions.WatchableNotFoundException;
 import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.models.Movie;
 import org.example.backend.models.MovieSeries;

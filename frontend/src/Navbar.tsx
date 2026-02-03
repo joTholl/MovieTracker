@@ -8,25 +8,21 @@ export default function Navbar() {
         nav("/")
     }
 
-    function navTodo() {
+    function navMovies() {
         nav("/movie")
     }
 
-    function navDoing() {
-        nav("/doing")
+    function navSeries() {
+        nav("/series")
     }
 
-    function navDone() {
-        nav("/done")
-    }
 
     return (
         <>
             <div className="navbar-div">
                 <button className="navbar-btn" onClick={navHome}>Home</button>
-                <button className="navbar-btn" onClick={navTodo}>Todos</button>
-                <button className="navbar-btn" onClick={navDoing}>Doing</button>
-                <button className="navbar-btn" onClick={navDone}>Done</button>
+                <button className="navbar-btn" onClick={navSeries}>Series</button>
+                <button className="navbar-btn" onClick={navMovies}>Movies</button>
             </div>
         </>
     )

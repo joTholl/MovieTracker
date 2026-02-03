@@ -1,6 +1,7 @@
 import {Route, Routes} from "react-router-dom";
-import Movie from "./components/Movie.tsx";
 import Navbar from "./Navbar.tsx";
+import HomePage from "./components/Homepage.tsx";
+import MovieDetailsPage from "./components/MovieDetailsPage.tsx";
 
 function App() {
 
@@ -10,9 +11,9 @@ function App() {
         <header>
             <Navbar />
         </header>
-      <h1>Hello World!</h1>
         <Routes>
-            <Route path="/movie" element={<Movie />}></Route>
+            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/movies/:id" element={<MovieDetailsPage />} />
         </Routes>
     </>
   )

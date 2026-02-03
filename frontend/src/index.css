@@ -62,9 +62,9 @@ body {
 .page-layout {
     display: grid;
     grid-template-columns: 250px 1fr;
-    column-gap: 40px; /* Abstand zwischen Filter & Movies */
+    column-gap: 40px;
     padding: 20px;
-    margin-top: 130px; /* Navbar-Höhe */
+    margin-top: 130px;
     max-width: 100%;
 }
 

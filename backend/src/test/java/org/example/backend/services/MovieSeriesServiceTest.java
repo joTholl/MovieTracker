@@ -60,9 +60,9 @@ class MovieSeriesServiceTest {
 
         MovieSeriesInDto movieSeriesInDto = new MovieSeriesInDto("Star Wars", List.of("1", "2", "3"));
 
-        Movie movie1 = new Movie("1", "abc", List.of("AmazonPrime", "Netflix", "WoW"));
-        Movie movie2 = new Movie("2", "def", List.of("Netflix", "Disney"));
-        Movie movie3 = new Movie("3", "ghi", List.of("AmazonPrime", "Disney"));
+        Movie movie1 = new Movie("1", "abc", List.of("AmazonPrime", "Netflix", "WoW"), "");
+        Movie movie2 = new Movie("2", "def", List.of("Netflix", "Disney"), "");
+        Movie movie3 = new Movie("3", "ghi", List.of("AmazonPrime", "Disney"), "");
 
         when(movieService.getMovieById("1")).thenReturn(movie1);
         when(movieService.getMovieById("2")).thenReturn(movie2);
@@ -86,9 +86,9 @@ class MovieSeriesServiceTest {
         MovieSeries savedMovieSeries = new MovieSeries("1", "Lord of the Rings", List.of("5", "6", "7"));
         MovieSeriesUpdateDto updateDto = new MovieSeriesUpdateDto("1","Star Wars", List.of("1", "2", "3"));
 
-        Movie movie1 = new Movie("1", "abc", List.of("AmazonPrime", "Netflix", "WoW"));
-        Movie movie2 = new Movie("2", "def", List.of("Netflix", "Disney"));
-        Movie movie3 = new Movie("3", "ghi", List.of("AmazonPrime", "Disney"));
+        Movie movie1 = new Movie("1", "abc", List.of("AmazonPrime", "Netflix", "WoW"), "");
+        Movie movie2 = new Movie("2", "def", List.of("Netflix", "Disney"), "");
+        Movie movie3 = new Movie("3", "ghi", List.of("AmazonPrime", "Disney"), "");
 
         when(repo.findById("1")).thenReturn(Optional.of(savedMovieSeries));
 

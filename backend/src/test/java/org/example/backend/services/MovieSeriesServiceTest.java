@@ -3,11 +3,9 @@ package org.example.backend.services;
 import org.example.backend.dtos.MovieSeriesInDto;
 import org.example.backend.dtos.MovieSeriesOutDto;
 import org.example.backend.dtos.MovieSeriesUpdateDto;
-import org.example.backend.helpers.UtilityFunctions;
 import org.example.backend.models.Movie;
 import org.example.backend.models.MovieSeries;
 import org.example.backend.repositories.MovieSeriesRepository;
-import org.example.backend.repositories.WatchableRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

@@ -10,7 +10,6 @@ import org.example.backend.repositories.WatchableRepository;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

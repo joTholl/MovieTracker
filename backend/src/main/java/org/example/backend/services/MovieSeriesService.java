@@ -23,7 +23,7 @@ public class MovieSeriesService {
         this.movieService = movieService;
     }
 
-    private List<Movie> GetMoviesById(List<String> movieIds) {
+    private List<Movie> getMoviesById(List<String> movieIds) {
 
         if (movieIds == null || movieIds.isEmpty()) {
             return new ArrayList<>();
@@ -53,9 +53,9 @@ public class MovieSeriesService {
 
         List<Movie> outMovies = new ArrayList<>();
 
-        List<String> Ids = movieSeries.movieIds();
-        if (!Ids.isEmpty()) {
-            for (String movieId : Ids) {
+        List<String> ids = movieSeries.movieIds();
+        if (!ids.isEmpty()) {
+            for (String movieId : ids) {
                 outMovies.add(movieService.getMovieById(movieId));
             }
         }
@@ -72,7 +72,7 @@ public class MovieSeriesService {
         UtilityFunctions utilityFunctions = new UtilityFunctions();
         String id = utilityFunctions.createId();
 
-        List<Movie> outMovies = GetMoviesById(inDto.movieIds());
+        List<Movie> outMovies = getMoviesById(inDto.movieIds());
 
         movieSeriesRepository.save(new MovieSeries(id, inDto.title(), inDto.movieIds()));
         return new MovieSeriesOutDto(id, inDto.title(), outMovies);
@@ -91,7 +91,7 @@ public class MovieSeriesService {
                 .withTitle(updateDto.title())
                 .withMovieIds(updateDto.movieIds());
 
-       List<Movie> outMovies = GetMoviesById(updateDto.movieIds());
+       List<Movie> outMovies = getMoviesById(updateDto.movieIds());
 
         movieSeriesRepository.save(updated);
         return new MovieSeriesOutDto(updated.id(), updated.title(), outMovies);

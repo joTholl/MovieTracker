@@ -502,7 +502,7 @@ class WatchableServiceTest {
 
 
     @Test
-    void getAllBySingleFilter_shouldThrowException_whenFilterDtoIsNull() throws Exception {
+    void getAllBySingleFilter_shouldThrowException_whenFilterDtoIsNull() {
 
         Exception ex = assertThrows(InvalidParameterException.class, () -> watchableService.getAllBySingleFilter(null, null));
         assertNotNull(ex);

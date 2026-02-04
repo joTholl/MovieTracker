@@ -1,7 +1,6 @@
 package org.example.backend.dtos;
 
 import lombok.With;
-import org.example.backend.models.Movie;
 
 import java.util.List;
 

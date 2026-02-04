@@ -14,8 +14,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -74,14 +72,14 @@ class MovieSeriesControllerTest {
         repo.save(movieSeries1);
         repo.save(movieSeries2);
 
-        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(
-                """
-                  {
-                  "id": "1",
-                  "title": "Batman",
-                  "movies": [null,null,null]
-                  }
-                """);
+//        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(
+//                """
+//                  {
+//                  "id": "1",
+//                  "title": "Batman",
+//                  "movies": [null,null,null]
+//                  }
+//                """);
 
         // when + then
         mockMvc.perform(get("/api/movieseries/1"))

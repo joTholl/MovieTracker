@@ -12,11 +12,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http){
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(a -> a.requestMatchers("/api/watchables").authenticated()
-                        .requestMatchers("/api/seasons").hasAuthority("ADMIN")
-                        .anyRequest().permitAll())
+                .authorizeHttpRequests(a -> a.anyRequest().permitAll())
+                .logout(l->l.logoutSuccessUrl("http://localhost:5173/"))
                 .oauth2Login(o -> o.defaultSuccessUrl("http://localhost:5173/"));
         return http.build();
     }

@@ -22,10 +22,6 @@ function App() {
                     <Route path="/movie" element={<Movie />} />
                 </Routes>
             </section>
-
-            <main className="page-layout">
-                <Filterbar />
-            </main>
         </>
     )
 }

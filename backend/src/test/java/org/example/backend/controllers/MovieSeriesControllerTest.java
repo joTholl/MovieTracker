@@ -72,20 +72,9 @@ class MovieSeriesControllerTest {
         repo.save(movieSeries1);
         repo.save(movieSeries2);
 
-//        ResultMatcher jsonMatch = MockMvcResultMatchers.content().json(
-//                """
-//                  {
-//                  "id": "1",
-//                  "title": "Batman",
-//                  "movies": [null,null,null]
-//                  }
-//                """);
-
         // when + then
         mockMvc.perform(get("/api/movieseries/1"))
                 .andExpect(status().isNotFound());
-                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                //.andExpect(jsonMatch);
     }
 
     @Test
@@ -102,9 +91,6 @@ class MovieSeriesControllerTest {
                          }
                          """))
                 .andExpect(status().isNotFound());
-//                .andExpect(jsonPath("$.id").value(notNullValue()))
-//                .andExpect(jsonPath("$.title").value("Batman"))
-//                .andExpect(jsonPath("$.movies", hasSize(3)));
     }
 
     @Test
@@ -124,9 +110,6 @@ class MovieSeriesControllerTest {
                                 }
                                 """))
                 .andExpect(status().isNotFound());
-//                .andExpect(jsonPath("$.id").value("1"))
-//                .andExpect(jsonPath("$.title").value("Batman"))
-//                .andExpect(jsonPath("$.movies", hasSize(2)));
     }
 
     @Test

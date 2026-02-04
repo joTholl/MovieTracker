@@ -1,4 +1,5 @@
 import type {MovieOut} from "../types/MovieOut.ts";
+import {Link} from "react-router-dom";
 
 type MovieCardProps = {
     movie: MovieOut
@@ -7,6 +8,7 @@ type MovieCardProps = {
 export default function MovieCard({movie}:MovieCardProps) {
     return(
         <>
+            <Link to={`/movies/${movie.id}`}>
             <div
                 className="movie-card"
                 style={{ backgroundImage: `url(${movie.thumbnail})` }}
@@ -17,6 +19,8 @@ export default function MovieCard({movie}:MovieCardProps) {
                     <p>{movie.streamable.join(", ")}</p>
                 </div>
             </div>
+            </Link>
+
         </>
     )
 }

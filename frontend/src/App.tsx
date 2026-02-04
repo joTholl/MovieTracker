@@ -11,20 +11,19 @@ function App() {
         <>
             <header>
                 <Navbar />
-                <Login/>
             </header>
             <Routes>
                 <Route path="/" element={<HomePage />}></Route>
                 <Route path="/movies/:id" element={<MovieDetailsPage />} />
+                <Route path="login" element={<Login/>}/>
             </Routes>
+            <main className="page-layout">
+                <Filterbar />
             <section className="movie-section">
                 <Routes>
                     <Route path="/movie" element={<Movie />} />
                 </Routes>
             </section>
-
-            <main className="page-layout">
-                <Filterbar />
             </main>
         </>
     )

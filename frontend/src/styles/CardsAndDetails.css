@@ -1,0 +1,50 @@
+.card {
+    border: 1px solid #333;
+    border-radius: 12px;
+    background: #111;
+}
+
+.card__link {
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card__link:hover {
+    background: #1a1a1a;
+}
+
+.card__title {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+}
+
+.card__meta {
+    margin: 0;
+    opacity: 0.8;
+    font-size: 13px;
+}
+
+.details {
+    border: 1px solid #333;
+    border-radius: 12px;
+    background: #111;
+    padding: 16px;
+}
+
+.details__title {
+    margin: 0 0 12px 0;
+}
+
+.details__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 900px) {
+    .details__grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

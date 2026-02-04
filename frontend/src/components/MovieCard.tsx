@@ -7,17 +7,15 @@ type MovieCardProps = {
 export default function MovieCard({movie}:MovieCardProps) {
     return(
         <>
-            <div>
-                <h1>Movie ID: {movie.id}</h1>
-                <h1>Watchable ID: {movie.watchable.id}</h1>
-                <h1>{movie.watchable.title}</h1>
-                <h1>{movie.watchable.actors + " "}</h1>
-                <h1>{movie.watchable.duration}</h1>
-                <h1>{movie.watchable.directors + " "}</h1>
-                <h1>{movie.watchable.releaseDate}</h1>
-                <h1>{movie.watchable.genres + " "}</h1>
-                <h1>{movie.watchable.ageRating}</h1>
-                <h1>{movie.streamable}</h1>
+            <div
+                className="movie-card"
+                style={{ backgroundImage: `url(${movie.thumbnail})` }}
+            >
+                <div className="movie-info">
+                    <h3>{movie.watchable.title}</h3>
+                    <p>{movie.watchable.duration}h · {movie.watchable.releaseDate} · {movie.watchable.ageRating}</p>
+                    <p>{movie.streamable.join(", ")}</p>
+                </div>
             </div>
         </>
     )

@@ -29,18 +29,20 @@
 .details {
     border: 1px solid #333;
     border-radius: 12px;
-    background: #111;
+    background: #272727;
     padding: 16px;
 }
 
 .details__title {
     margin: 0 0 12px 0;
+    color: #dddddd;
 }
 
 .details__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
+    color: #dddddd;
 }
 
 @media (min-width: 900px) {

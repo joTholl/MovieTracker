@@ -1,6 +1,6 @@
-import {useMovie} from "../api/MovieService.ts";
+import {useMovie} from "../../api/MovieService.ts";
 import MovieCard from "./MovieCard.tsx";
-import Filterbar from "../Filterbar.tsx";
+import Filterbar from "../../Filterbar.tsx";
 
 export default function Movie() {
 

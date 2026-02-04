@@ -3,12 +3,11 @@ import { useEffect, useState } from "react";
 import  "../styles/HomeStyles.css"
 import {getAllMovies} from "../api/ApiMovies.ts";
 import type {MovieOut} from "../types/MovieOut.ts";
-import MovieCardPreview from "./MovieCardPreview.tsx";
 import Filterbar from "../Filterbar.tsx";
-import MovieCard from "./MovieCard.tsx";
+import MovieCard from "./movie/MovieCard.tsx";
 import {getAllSeries} from "../api/ApiSeries.ts";
 import type {Series} from "../types/Series.ts";
-import SeriesCardPreview from "./SeriesCardPreview.tsx";
+import SeriesCardPreview from "./series/SeriesCardPreview.tsx";
 
 
 export default function HomePage() {
@@ -42,17 +41,16 @@ export default function HomePage() {
         // <section> = a grouped section of the page
         <div>
             <main className="page-layout">
-                <Filterbar />
-
+                <Filterbar/>
                 <div className="movie-row">
                     {movies.map((m) => (
-                        <MovieCard key={m.id} movie={m} />
+                        <MovieCard key={m.id} movie={m}/>
                     ))}
-                </div>
-                <div className="movie-row">
                     {series.map((s) => (
                         <SeriesCardPreview key={s.id} serie={s}/>
                     ))}
+                </div>
+                <div className="movie-row">
                 </div>
             </main>
         </div>

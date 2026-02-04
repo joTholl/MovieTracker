@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import type {MovieOut} from "../types/MovieOut.ts";
-import  "../styles/HomeStyles.css"
-import  "../styles/CardsAndDetails.css"
+import type {MovieOut} from "../../types/MovieOut.ts";
+import  "../../styles/HomeStyles.css"
+import  "../../styles/CardsAndDetails.css"
 
 type Props = {
     movie: MovieOut;

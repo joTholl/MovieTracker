@@ -558,7 +558,7 @@ class WatchableServiceTest {
     }
 
     @Test
-    void getAllByMultipleFilter_shouldThrowException_whenFilterDtoIsNull() throws Exception {
+    void getAllByMultipleFilter_shouldThrowException_whenFilterDtoIsNull() {
         Exception ex = assertThrows(InvalidParameterException.class, () -> watchableService.getAllByMultipleFilters(null));
         assertNotNull(ex);
     }

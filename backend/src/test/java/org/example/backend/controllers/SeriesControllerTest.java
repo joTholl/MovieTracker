@@ -39,7 +39,7 @@ class SeriesControllerTest {
                 {
                   "title": "Test Series",
                   "seasonInDtos": [],
-                  "imageUrl": "img.png"
+                  "thumbnail": "img.png"
                 }
                 """;
 
@@ -78,7 +78,7 @@ class SeriesControllerTest {
                                 {
                                   "title": "Test Series",
                                   "seasonInDtos": [],
-                                  "imageUrl": "img.png"
+                                  "thumbnail": "img.png"
                                 }
                                 """))
                 .andReturn()
@@ -107,7 +107,7 @@ class SeriesControllerTest {
                                 {
                                   "title": "Old Title",
                                   "seasonInDtos": [],
-                                  "imageUrl": "old.png"
+                                  "thumbnail": "old.png"
                                 }
                                 """))
                 .andReturn()
@@ -122,12 +122,12 @@ class SeriesControllerTest {
                                 {
                                   "title": "New Title",
                                   "seasons": [],
-                                  "imageUrl": "new.png"
+                                  "thumbnail": "new.png"
                                 }
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("New Title"))
-                .andExpect(jsonPath("$.imageUrl").value("new.png"));
+                .andExpect(jsonPath("$.thumbnail").value("new.png"));
     }
 
     @Test
@@ -138,7 +138,7 @@ class SeriesControllerTest {
                                 {
                                   "title": "x",
                                   "seasons": [],
-                                  "imageUrl": "x"
+                                  "thumbnail": "x"
                                 }
                                 """))
                 .andExpect(status().isNotFound());
@@ -152,7 +152,7 @@ class SeriesControllerTest {
                                 {
                                   "title": "To Delete",
                                   "seasonInDtos": [],
-                                  "imageUrl": "img.png"
+                                  "thumbnail": "img.png"
                                 }
                                 """))
                 .andReturn()

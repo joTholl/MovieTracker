@@ -24,9 +24,9 @@ public class SeriesService {
     private final UtilityFunctions utilityFunctions;
 
     public List<Series> getAllSeries() {
-        List<SeriesSeasonIdDto> SeriesseasonIdDtos = seriesRepository.findAll();
+        List<SeriesSeasonIdDto> seriesSeasonIdDtos = seriesRepository.findAll();
         List<Series> series = new ArrayList<>();
-        for (SeriesSeasonIdDto swid : SeriesseasonIdDtos) {
+        for (SeriesSeasonIdDto swid : seriesSeasonIdDtos) {
             series.add(new Series(swid, seasonService));
         }
         return series;
@@ -45,7 +45,7 @@ public class SeriesService {
             Season w = seasonService.createSeason(seasonInDto);
             seasons.add(w);
         }
-        Series Series = new Series(id, seriesInDTO.title(), seasons, seriesInDTO.imageUrl());
+        Series Series = new Series(id, seriesInDTO.title(), seasons, seriesInDTO.thumbnail());
         seriesRepository.save(new SeriesSeasonIdDto(Series));
         return Series;
     }
@@ -70,8 +70,8 @@ public class SeriesService {
                 seasonService.deleteSeason(seasonId);
             }
         }
-        seriesRepository.save(new SeriesSeasonIdDto(id,seriesUpdateDTO.title(), seasonIds,seriesUpdateDTO.imageUrl()));
-        return new Series(id, seriesUpdateDTO.title(), seasons, seriesUpdateDTO.imageUrl());
+        seriesRepository.save(new SeriesSeasonIdDto(id,seriesUpdateDTO.title(), seasonIds,seriesUpdateDTO.thumbnail()));
+        return new Series(id, seriesUpdateDTO.title(), seasons, seriesUpdateDTO.thumbnail());
     }
 
     public void deleteSeries(String id) {

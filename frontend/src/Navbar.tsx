@@ -1,4 +1,5 @@
 import {useNavigate} from "react-router-dom";
+import Login from "./components/Login.tsx";
 
 export default function Navbar() {
 
@@ -22,6 +23,7 @@ export default function Navbar() {
                 <button className="navbar-btn" onClick={navHome}>Home</button>
                 <button className="navbar-btn" onClick={navTodo}>Movies</button>
                 <button className="navbar-btn" onClick={navDoing}>Series</button>
+                <Login/>
             </div>
         </>
     )

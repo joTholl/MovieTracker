@@ -47,7 +47,7 @@ public class MovieControllerTests {
         LocalDate release = LocalDate.parse("2014-11-07");
 
         Watchable watchable = new Watchable("1", "Interstellar", actors, "02:49", directors, release , genres, 0, 12);
-        Movie movie = new Movie("1", "1", streamable);
+        Movie movie = new Movie("1", "1", streamable, "abc");
 
         repoWatchable.save(watchable);
         repo.save(movie);
@@ -86,7 +86,8 @@ public class MovieControllerTests {
                                    "Prime",
                                    "Disney+",
                                    "WoW"
-                               ]
+                               ],
+                               "thumbnail": "abc"
                            }
                            ]
 """));
@@ -102,7 +103,7 @@ public class MovieControllerTests {
         LocalDate release = LocalDate.parse("2014-11-07");
 
         Watchable watchable = new Watchable("1", "Interstellar", actors, "02:49", directors, release , genres, 0, 12);
-        Movie movie = new Movie("1", "1", streamable);
+        Movie movie = new Movie("1", "1", streamable, "abc");
 
         repoWatchable.save(watchable);
         repo.save(movie);
@@ -140,7 +141,8 @@ public class MovieControllerTests {
                                    "Prime",
                                    "Disney+",
                                    "WoW"
-                               ]
+                               ],
+                               "thumbnail": "abc"
                            }
 """));
     }
@@ -185,7 +187,7 @@ public class MovieControllerTests {
     @Test
     void changeMovie_ShouldReturnChangedMovie() throws Exception {
         List<String> streamable = List.of("Amazon", "Prime");
-        Movie movie = new Movie("4", "4", streamable);
+        Movie movie = new Movie("4", "4", streamable, "abc");
         repo.save(movie);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/movie/4")
@@ -198,7 +200,8 @@ public class MovieControllerTests {
                                         "Prime",
                                         "Disney+",
                                         "Test123"
-                                    ]
+                                    ],
+                                    "thumbnail": "abc"
                                 }
                                 """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -212,7 +215,8 @@ public class MovieControllerTests {
                                 "Prime",
                                 "Disney+",
                                 "Test123"
-                            ]
+                            ],
+                            "thumbnail": "abc"
                         }
      
               """));
@@ -230,7 +234,8 @@ public class MovieControllerTests {
                                         "Prime",
                                         "Disney+",
                                         "Test123"
-                                    ]
+                                    ],
+                                    "thumbnail": "abc"
                                 }
                                 """))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -239,8 +244,14 @@ public class MovieControllerTests {
 
     @Test
     void deleteMovie_ShouldReturnTrueIfSuccessfull() throws Exception {
+        List<String> actors = List.of("Matthew McConaughey", "Anne Hathaway", "Jessica Chastain");
+        List<String> directors = List.of("Christopher Nolan");
+        List<String> genres = List.of("SciFi", "Drama", "Adventure");
+        LocalDate release = LocalDate.parse("2014-11-07");
+        Watchable watchable = new Watchable("1", "Interstellar", actors, "02:49", directors, release , genres, 0, 12);
         List<String> streamable = List.of("Amazon", "Prime");
-        Movie movie = new Movie("4", "4", streamable);
+        Movie movie = new Movie("4", "1", streamable, "abc");
+        repoWatchable.save(watchable);
         repo.save(movie);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/movie/4"))

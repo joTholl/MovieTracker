@@ -13,20 +13,15 @@ export default function Navbar() {
     }
 
     function navDoing() {
-        nav("/doing")
-    }
-
-    function navDone() {
-        nav("/done")
+        nav("/series")
     }
 
     return (
         <>
             <div className="navbar-div">
                 <button className="navbar-btn" onClick={navHome}>Home</button>
-                <button className="navbar-btn" onClick={navTodo}>Todos</button>
-                <button className="navbar-btn" onClick={navDoing}>Doing</button>
-                <button className="navbar-btn" onClick={navDone}>Done</button>
+                <button className="navbar-btn" onClick={navTodo}>Movies</button>
+                <button className="navbar-btn" onClick={navDoing}>Series</button>
             </div>
         </>
     )

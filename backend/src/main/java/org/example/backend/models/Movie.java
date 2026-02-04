@@ -6,5 +6,5 @@ import org.springframework.data.annotation.Id;
 import java.util.List;
 
 @With
-public record Movie(@Id String id, String watchableID, List<String> streamable) {
+public record Movie(@Id String id, String watchableID, List<String> streamable, String thumbnail) {
 }

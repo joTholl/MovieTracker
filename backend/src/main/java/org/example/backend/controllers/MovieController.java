@@ -1,7 +1,8 @@
 package org.example.backend.controllers;
 
+import org.example.backend.dtos.MovieOutDto;
 import org.example.backend.models.Movie;
-import org.example.backend.dtos.MovieDto;
+import org.example.backend.dtos.MovieInDto;
 import org.example.backend.services.MovieService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +19,16 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<Movie> getAllMovies() {
+    public List<MovieOutDto> getAllMovies() {
         return service.getAllMovies();
     }
 
     @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable String id) {
-        return service.getMovieById(id);
+    public MovieOutDto getMovieOutDtoById(@PathVariable String id) {
+        return service.getMovieOutDtoById(id);
     }
+
+
 
     /**
     @GetMapping("/title/{title}")
@@ -60,12 +63,12 @@ public class MovieController {
      **/
 
     @PostMapping
-    public Movie createMovie(@RequestBody MovieDto movie) {
+    public Movie createMovie(@RequestBody MovieInDto movie) {
         return service.createMovie(movie);
     }
 
     @PutMapping("/{id}")
-    public Movie changeMovie(@PathVariable String id, @RequestBody MovieDto movie) {
+    public Movie changeMovie(@PathVariable String id, @RequestBody MovieInDto movie) {
         return service.changeMovie(id, movie);
     }
 

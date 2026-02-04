@@ -1,15 +1,21 @@
-import type {Movie} from "../types/Movie.ts";
+import type {MovieOut} from "../types/MovieOut.ts";
 
 type MovieCardProps = {
-    movie: Movie
+    movie: MovieOut
 }
 
 export default function MovieCard({movie}:MovieCardProps) {
     return(
         <>
-            <div>
-                <h1>Movie ID: {movie.id}</h1>
-                <h1>Watchable ID: {movie.watchableID}</h1>
+            <div
+                className="movie-card"
+                style={{ backgroundImage: `url(${movie.thumbnail})` }}
+            >
+                <div className="movie-info">
+                    <h3>{movie.watchable.title}</h3>
+                    <p>{movie.watchable.duration}h · {movie.watchable.releaseDate} · {movie.watchable.ageRating}</p>
+                    <p>{movie.streamable.join(", ")}</p>
+                </div>
             </div>
         </>
     )

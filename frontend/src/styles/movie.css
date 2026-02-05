@@ -1,6 +1,7 @@
 .movie-card {
     position: relative;
     min-height: 400px;
+    display: block;
 
     border: 1px solid gray;
     border-radius: 8px;
@@ -16,6 +17,9 @@
     margin-left: 20px;
 }
 
+.movie-card:hover {
+    background-color: gray;
+}
 .movie-card > * {
     min-width: 0;
 }

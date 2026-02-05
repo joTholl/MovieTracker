@@ -19,23 +19,12 @@ function App() {
                 <Route path="/series/:id" element={<SeriesDetailsPage/>}/>
                 <Route path="/watchables/:id" element={<WatchableDetailsPage/>}/>
             </Routes>
+
             <section className="movie-section">
                 <Routes>
                     <Route path="/movie" element={<Movie />} />
                 </Routes>
             </section>
-
-            <main className="page-layout">
-                <Filterbar />
-
-                <section className="movie-section">
-                    <Routes>
-                        <Route path="/movie" element={<Movie />} />
-                        <Route path="/series" element={<Series/>}/>
-                        <Route path={"/series/:id"} element={<SeriesDetail/>}/>
-                    </Routes>
-                </section>
-            </main>
         </>
     )
 }

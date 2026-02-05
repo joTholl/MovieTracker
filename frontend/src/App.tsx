@@ -28,7 +28,6 @@ function App() {
                     <Route path="/newSeries" element={<NewSeriesPage/>}/>
                 </Routes>
             </section>
-
         </>
     )
 }

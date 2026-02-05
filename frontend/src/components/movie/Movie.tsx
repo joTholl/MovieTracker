@@ -6,16 +6,16 @@ export default function Movie() {
 
     const {Movies} = useMovie("api/movie")
 
-    return (
-        <div>
+    return(
+        <>
             <main className="page-layout">
-                <Filterbar/>
-                <div className="movie-row">
-                    {Movies.map(movie => (
-                        <MovieCard movie={movie}/>
-                    ))}
-                </div>
+                <Filterbar />
+                    <div className="movie-row">
+                        {Movies.map(movie => (
+                            <MovieCard movie={movie}/>
+                        ))}
+                    </div>
             </main>
-        </div>
+</>
     )
 }

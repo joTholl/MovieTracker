@@ -11,20 +11,14 @@ export default function SeriesCard({series}: SeriesCardProps) {
     return (
         <>
 
-                <div
-                    className="movie-card"
-                    style={{backgroundImage: `url(${series.thumbnail})`}}
-
-                >
-
-                    <div className="movie-info">
-                        <h3>{series.title}</h3>
-                        <p>{series.seasons.length} Season(s)
-                            · {firstWatchable.releaseDate} · {firstWatchable.ageRating}</p>
-                        <p>{series.seasons?.[0]?.streamables?.join(", ") ?? "Keine Anbieter"}</p>
-                    </div>
-
+            <div className="movie-card" style={{backgroundImage: `url(${series.thumbnail})`}}>
+                <div className="movie-info">
+                    <h3>{series.title}</h3>
+                    <p>{series.seasons.length} Season(s)
+                        · {firstWatchable.releaseDate} · {firstWatchable.ageRating}</p>
+                    <p>{series.seasons?.[0]?.streamables?.join(", ") ?? "Keine Anbieter"}</p>
                 </div>
+            </div>
 
         </>
     )

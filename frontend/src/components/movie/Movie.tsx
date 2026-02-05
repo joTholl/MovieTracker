@@ -4,18 +4,18 @@ import Filterbar from "../../Filterbar.tsx";
 
 export default function Movie() {
 
-    const { Movies } = useMovie("api/movie")
+    const {Movies} = useMovie("api/movie")
 
-    return(
+    return (
         <div>
-        <main className="page-layout">
-            <Filterbar />
-            <div className="movie-row">
-            {Movies.map(movie => (
-                <MovieCard movie={movie}/>
-            ))}
-            </div>
-        </main>
+            <main className="page-layout">
+                <Filterbar/>
+                <div className="movie-row">
+                    {Movies.map(movie => (
+                        <MovieCard movie={movie}/>
+                    ))}
+                </div>
+            </main>
         </div>
     )
 }

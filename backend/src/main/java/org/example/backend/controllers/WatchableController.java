@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/watchables")
+@CrossOrigin(origins = "http://localhost:5173")
 public class WatchableController {
 
     private final WatchableService watchableService;

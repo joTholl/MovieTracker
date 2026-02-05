@@ -8,8 +8,8 @@ type MovieCardProps = {
 export default function MovieCard({movie}:MovieCardProps) {
     return(
         <>
-            <Link to={`/movies/${movie.id}`}>
-            <div
+            <Link
+                to={`/movies/${movie.id}`}
                 className="movie-card"
                 style={{ backgroundImage: `url(${movie.thumbnail})` }}
             >
@@ -18,7 +18,6 @@ export default function MovieCard({movie}:MovieCardProps) {
                     <p>{movie.watchable.duration}h · {movie.watchable.releaseDate} · {movie.watchable.ageRating}</p>
                     <p>{movie.streamable.join(", ")}</p>
                 </div>
-            </div>
             </Link>
 
         </>

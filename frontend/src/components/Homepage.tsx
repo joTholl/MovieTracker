@@ -38,7 +38,6 @@ export default function HomePage() {
     }, []);
 
     return (
-        // <section> = a grouped section of the page
         <div>
             <main className="page-layout">
                 <Filterbar/>

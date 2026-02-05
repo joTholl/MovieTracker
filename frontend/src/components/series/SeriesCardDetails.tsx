@@ -13,9 +13,11 @@ export default function SeriesCardDetails({ series }: Props) {
     return (
         <article className="details">
             <h2 className="details__title">{series.title}</h2>
+            <div>
             {series.seasons.map((s) => (
                 <SeasonCardPreview key={s.id} season={s}/>))
             }
+        </div>
         </article>
     );
 }

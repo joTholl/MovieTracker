@@ -4,5 +4,5 @@ export type Series = {
     id: string;
     title: string;
     seasons: Season[];
-    imageUrl: string;
+    thumbnail: string;
 };

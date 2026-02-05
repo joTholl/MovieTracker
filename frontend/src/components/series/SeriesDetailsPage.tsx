@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import type {MovieOut} from "../../types/MovieOut.ts";
-import {getMovieById} from "../../api/ApiMovies.ts";
-import MovieCardDetails from "./MovieCardDetails.tsx";
+import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import type {Series} from "../../types/Series.ts";
+import {getSeriesById} from "../../api/ApiSeries.ts";
+import SeriesCardDetails from "./SeriesCardDetails.tsx";
 
-
-export default function MovieDetailsPage() {
+export default function SeriesDetailsPage() {
     const { id } = useParams();
-    const [movie, setMovie] = useState<MovieOut | null>(null);
+    const [series, setSeries] = useState<Series | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!id) return;
 
-        getMovieById(id)
+        getSeriesById(id)
             .then((data) => {
-                setMovie(data);
+                setSeries(data);
                 setError(null);
             })
             .catch((e: unknown) => {
@@ -25,11 +24,11 @@ export default function MovieDetailsPage() {
 
     if (!id) return <p>Missing id.</p>;
     if (error) return <p style={{ color: "salmon" }}>Error: {error}</p>;
-    if (!movie) return <p>Loading…</p>;
+    if (!series) return <p>Loading…</p>;
 
     return (
         <section>
-            <MovieCardDetails movie={movie} />
+            <SeriesCardDetails series={series} />
         </section>
     );
 }

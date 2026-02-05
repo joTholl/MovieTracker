@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/api/series")
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class SeriesController {
 
     private final SeriesService seriesService;
@@ -23,24 +24,24 @@ public class SeriesController {
     }
 
     @GetMapping("/{id}")
-    public Series getSeasonById(@PathVariable String id) {
+    public Series getSeriesById(@PathVariable String id) {
         return seriesService.getSeriesById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Series createSeason(@RequestBody SeriesInDto seriesInDTO) {
+    public Series createSeries(@RequestBody SeriesInDto seriesInDTO) {
         return seriesService.createSeries(seriesInDTO);
     }
 
     @PutMapping("/{id}")
-    public Series updateSeason(@PathVariable String id, @RequestBody SeriesUpdateDto seriesUpdateDTO){
+    public Series updateSeries(@PathVariable String id, @RequestBody SeriesUpdateDto seriesUpdateDTO){
         return seriesService.updateSeries(id, seriesUpdateDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSeason(@PathVariable String id){
+    public void deleteSeries(@PathVariable String id){
         seriesService.deleteSeries(id);
     }
 }

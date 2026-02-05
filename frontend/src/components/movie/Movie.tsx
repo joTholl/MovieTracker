@@ -4,7 +4,7 @@ import Filterbar from "../../Filterbar.tsx";
 
 export default function Movie() {
 
-    const { Movies } = useMovie("api/movie")
+    const {Movies} = useMovie("api/movie")
 
     return(
         <>

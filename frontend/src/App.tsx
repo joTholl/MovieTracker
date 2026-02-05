@@ -22,7 +22,7 @@ function App() {
 
             <section className="movie-section">
                 <Routes>
-                    <Route path="/movie" element={<Movie />} />
+                    <Route path="/movie" element={<Movie/>} />
                     <Route path="/series" element={<Series/>}/>
                 </Routes>
             </section>

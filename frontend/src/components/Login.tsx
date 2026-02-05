@@ -21,8 +21,8 @@ export default function Login() {
 
     return (
     <>
-        <button onClick={loginUser}>Login</button>
-        <button onClick={logoutUser}>Logout</button>
+        <button className="navbar-btn" onClick={loginUser}>Login</button>
+        <button className="navbar-btn" onClick={logoutUser}>Logout</button>
     </>
     )
 }

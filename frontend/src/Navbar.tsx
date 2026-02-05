@@ -9,13 +9,14 @@ export default function Navbar() {
         nav("/")
     }
 
-    function navTodo() {
+    function navMovies() {
         nav("/movie")
     }
 
-    function navDoing() {
+    function navSeries() {
         nav("/series")
     }
+
 
     return (
         <>

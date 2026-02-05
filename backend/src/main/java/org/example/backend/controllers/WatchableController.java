@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import org.example.backend.dtos.FilterDto;
 import org.example.backend.dtos.WatchableInDto;
 import org.example.backend.models.Watchable;
 import org.example.backend.services.WatchableService;
@@ -26,6 +27,12 @@ public class WatchableController {
     }
 
     // GET
+    @GetMapping("/filtered")
+    public List<Watchable> getAllByFilters(@RequestBody List<FilterDto> filters){
+        return watchableService.getAllByMultipleFilters(filters);
+    }
+
+    // GET
     @GetMapping("/{id}")
     public Watchable getById(@PathVariable String id) {
         return watchableService.getById(id);
@@ -34,8 +41,7 @@ public class WatchableController {
     // POST
     @PostMapping
     public ResponseEntity<Watchable> create(@RequestBody WatchableInDto in) {
-        Watchable createdWatchable = watchableService.create(in);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdWatchable);
+        return ResponseEntity.status(HttpStatus.CREATED).body(watchableService.create(in));
     }
 
     // DELETE

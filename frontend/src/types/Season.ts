@@ -4,5 +4,5 @@ export type Season = {
     id: string;
     seasonNumber: number;
     watchables: Watchable[];
-    streamables: string;
+    streamables: string[];
 };

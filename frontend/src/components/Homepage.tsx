@@ -8,12 +8,15 @@ import MovieCard from "./movie/MovieCard.tsx";
 import {getAllSeries} from "../api/ApiSeries.ts";
 import type {Series} from "../types/Series.ts";
 import SeriesCardPreview from "./series/SeriesCardPreview.tsx";
+import type {FilterDto} from "../types/FilterDto.ts";
 
 
-export default function HomePage() {
+export function HomePage() {
     const [movies, setMovies] = useState<MovieOut[]>([]);
     const [series, setSeries] = useState<Series[]>([]);
     const [error, setError] = useState<string | null>(null);
+
+    const [filters, setFilters] = useState<FilterDto[]>([]);
 
     useEffect(() => {
         getAllMovies()
@@ -39,17 +42,21 @@ export default function HomePage() {
 
     return (
         <div>
+            <div> {filters.length > 0 ? (
+                <h1 className={"movieCard__title"}>Filters active</h1>
+            ) : (
+                <h1 className={"movieCard__title"}>No filters</h1>
+            )} </div>
             <main className="page-layout">
-                <Filterbar/>
+                <Filterbar filters={filters} setFilters={setFilters}/>
                 <div className="movie-row">
+
                     {movies.map((m) => (
                         <MovieCard key={m.id} movie={m}/>
                     ))}
                     {series.map((s) => (
                         <SeriesCardPreview key={s.id} serie={s}/>
                     ))}
-                </div>
-                <div className="movie-row">
                 </div>
             </main>
         </div>

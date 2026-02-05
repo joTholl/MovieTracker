@@ -17,13 +17,12 @@ export default function Navbar() {
         nav("/series")
     }
 
-
     return (
         <>
             <div className="navbar-div">
                 <button className="navbar-btn" onClick={navHome}>Home</button>
-                <button className="navbar-btn" onClick={navTodo}>Movies</button>
-                <button className="navbar-btn" onClick={navDoing}>Series</button>
+                <button className="navbar-btn" onClick={navMovies}>Movies</button>
+                <button className="navbar-btn" onClick={navSeries}>Series</button>
                 <Login/>
             </div>
         </>

@@ -3,6 +3,8 @@ import Movie from "./components/Movie.tsx";
 import Navbar from "./Navbar.tsx";
 import Filterbar from "./Filterbar.tsx";
 import Series from "./components/Series.tsx";
+import SeriesDetail from "./components/SeriesDetail.tsx";
+
 
 function App() {
     return (
@@ -18,6 +20,7 @@ function App() {
                     <Routes>
                         <Route path="/movie" element={<Movie />} />
                         <Route path="/series" element={<Series/>}/>
+                        <Route path={"/series/:id"} element={<SeriesDetail/>}/>
                     </Routes>
                 </section>
             </main>

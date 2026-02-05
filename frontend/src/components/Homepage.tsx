@@ -37,6 +37,8 @@ export default function HomePage() {
             });
     }, []);
 
+    console.log(error);
+
     return (
         <div>
             <main className="page-layout">

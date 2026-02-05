@@ -115,7 +115,7 @@ class SeriesServiceTest {
 
         verify(seriesRepositoryMock).save(any());
         assertEquals(updated.title(), result.title());
-        assertEquals(updated.imageUrl(), result.imageUrl());
+        assertEquals(updated.thumbnail(), result.thumbnail());
     }
 
     @Test
@@ -123,7 +123,7 @@ class SeriesServiceTest {
         Season season3 = new Season("s3", 3, List.of(), List.of("disney"));
 
         SeriesUpdateDto updateDto =
-                new SeriesUpdateDto(series1.id(), series1.title(), List.of(season1, season3), series1.imageUrl());
+                new SeriesUpdateDto(series1.id(), series1.title(), List.of(season1, season3), series1.thumbnail());
 
         when(seriesRepositoryMock.findById("abc")).thenReturn(Optional.of(ssid1));
         when(utilityFunctionsMock.createId()).thenReturn("s3");
@@ -139,7 +139,7 @@ class SeriesServiceTest {
     @Test
     void updateSeries_shouldDeleteSeason() {
         SeriesUpdateDto updateDto =
-                new SeriesUpdateDto(series1.id(), series1.title(), new ArrayList<>(), series1.imageUrl());
+                new SeriesUpdateDto(series1.id(), series1.title(), new ArrayList<>(), series1.thumbnail());
 
         when(seriesRepositoryMock.findById("abc")).thenReturn(Optional.of(ssid1));
         when(seriesRepositoryMock.save(any())).thenReturn(ssid1);

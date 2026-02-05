@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @With
-public record Series(String id, String title, List<Season> seasons, String imageUrl) {
+public record Series(String id, String title, List<Season> seasons, String thumbnail) {
 
     public Series(SeriesSeasonIdDto ssid, SeasonService seasonService) {
         List<Season> seasons = new ArrayList<>();
@@ -16,6 +16,6 @@ public record Series(String id, String title, List<Season> seasons, String image
             Season season = seasonService.getSeasonById(seasonId);
             seasons.add(season);
         }
-        this(ssid.id(), ssid.title(),seasons, ssid.imageUrl());
+        this(ssid.id(), ssid.title(),seasons, ssid.thumbnail());
     }
 }

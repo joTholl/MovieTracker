@@ -1,5 +1,5 @@
-import type {Watchable} from "../types/Watchable.ts";
-import "../styles/CardsAndDetails.css"
+import type {Watchable} from "../../types/Watchable.ts";
+import "../../styles/CardsAndDetails.css"
 
 
 type Props = {

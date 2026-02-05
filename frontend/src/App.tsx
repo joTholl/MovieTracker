@@ -1,9 +1,9 @@
 import {Route, Routes} from "react-router-dom";
 import Navbar from "./Navbar.tsx";
 import HomePage from "./components/Homepage.tsx";
-import MovieDetailsPage from "./components/MovieDetailsPage.tsx";
+import MovieDetailsPage from "./components/movie/MovieDetailsPage.tsx";
 import Login from "./components/Login.tsx";
-import Movie from "./components/Movie.tsx";
+import Movie from "./components/movie/Movie.tsx";
 
 function App() {
     return (

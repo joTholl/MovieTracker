@@ -1,4 +1,4 @@
-import type {MovieOut} from "../types/MovieOut.ts";
+import type {MovieOut} from "../../types/MovieOut.ts";
 import {Link} from "react-router-dom";
 
 type MovieCardProps = {

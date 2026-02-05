@@ -1,7 +1,7 @@
-import type {MovieOut} from "../types/MovieOut.ts";
-import "../styles/CardsAndDetails.css"
+import type {MovieOut} from "../../types/MovieOut.ts";
+import "../../styles/CardsAndDetails.css"
 import MovieCard from "./MovieCard.tsx";
-import {useMovie} from "../api/MovieService.ts";
+import {useMovie} from "../../api/MovieService.ts";
 
 
 type Props = {

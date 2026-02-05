@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type {MovieOut} from "../types/MovieOut.ts";
-import {getMovieById} from "../api/ApiMovies.ts";
+import type {MovieOut} from "../../types/MovieOut.ts";
+import {getMovieById} from "../../api/ApiMovies.ts";
 import MovieDetailsCard from "./MovieCardDetails.tsx";
 
 

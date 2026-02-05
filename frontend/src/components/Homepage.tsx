@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import  "../styles/HomeStyles.css"
 import {getAllMovies} from "../api/ApiMovies.ts";
 import type {MovieOut} from "../types/MovieOut.ts";
-import MovieCardPreview from "./MovieCardPreview.tsx";
+import MovieCardPreview from "./movie/MovieCardPreview.tsx";
 
 
 export default function HomePage() {

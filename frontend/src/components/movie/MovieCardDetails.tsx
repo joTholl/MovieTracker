@@ -1,18 +1,17 @@
-import type {MovieOut} from "../types/MovieOut.ts";
-import "../styles/CardsAndDetails.css"
+import type {MovieOut} from "../../types/MovieOut.ts";
+import "../../styles/CardsAndDetails.css"
 
 
 type Props = {
     movie: MovieOut;
 };
 
-export default function MovieDetailsCard({ movie }: Props) {
+export default function MovieCardDetails({ movie }: Props) {
     const w = movie.watchable;
 
     return (
         <article className="details">
             <h2 className="details__title">{w.title}</h2>
-
             <div className="details__grid">
                 <div>
                     <p><b>Movie ID:</b> {movie.id}</p>
@@ -24,7 +23,6 @@ export default function MovieDetailsCard({ movie }: Props) {
                     <p><b>Genres:</b> {w.genres.length ? w.genres.join(", ") : "—"}</p>
                     {w.episode > 0 && <p><b>Episode:</b> {w.episode}</p> }
                     <p><b>Age rating:</b> {w.ageRating}+</p>
-
                 </div>
             </div>
         </article>

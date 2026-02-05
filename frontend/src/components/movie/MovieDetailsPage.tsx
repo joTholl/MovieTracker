@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type {MovieOut} from "../types/MovieOut.ts";
-import {getMovieById} from "../api/ApiMovies.ts";
-import MovieDetailsCard from "./MovieCardDetails.tsx";
+import type {MovieOut} from "../../types/MovieOut.ts";
+import {getMovieById} from "../../api/ApiMovies.ts";
+import MovieCardDetails from "./MovieCardDetails.tsx";
 
 
 export default function MovieDetailsPage() {
@@ -29,7 +29,7 @@ export default function MovieDetailsPage() {
 
     return (
         <section>
-            <MovieDetailsCard movie={movie} />
+            <MovieCardDetails movie={movie} />
         </section>
     );
 }
